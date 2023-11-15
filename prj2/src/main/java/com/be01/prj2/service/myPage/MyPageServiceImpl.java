@@ -34,6 +34,24 @@ public class MyPageServiceImpl implements MyPageService {
         if (myPageEntity == null) {
             throw new MyPageException("유저 정보를 찾을 수 없습니다.");
         }
+
+        // 변경된 엔티티 정보 반환
+        return new MyPageDto(myPageEntity.getName(), myPageEntity.getEmail(), myPageEntity.getMobile(),
+                myPageEntity.getAddress(), myPageEntity.getGender(), myPageEntity.getProfile(), myPageEntity.getMyInfo());
+    }
+
+    @Override
+    public MyPageDto updateMyPageInfo(String email, MyPageDto myPageDto) {
+
+        MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
+
+        if (myPageEntity == null) {
+            throw new MyPageException("유저 정보 수정에 실패했습니다.");
+        }
+
+        myPageEntity.updateMyPage(myPageDto);
+        myPageRepository.save(myPageEntity);
+
         return new MyPageDto(myPageEntity.getName(), myPageEntity.getEmail(), myPageEntity.getMobile(),
                 myPageEntity.getAddress(), myPageEntity.getGender(), myPageEntity.getProfile(), myPageEntity.getMyInfo());
     }

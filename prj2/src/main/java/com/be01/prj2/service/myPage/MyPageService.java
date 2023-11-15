@@ -13,4 +13,6 @@ public interface MyPageService {
     List<CartDto> getCartProduct(Long id);
 
     List<PurViewDto> getViewProduct(Long id);
+
+    public MyPageDto updateMyPageInfo(String email, MyPageDto updateMtPageInfo);
 }

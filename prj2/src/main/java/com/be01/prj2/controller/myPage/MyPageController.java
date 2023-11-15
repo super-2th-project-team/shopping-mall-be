@@ -20,13 +20,20 @@ public class MyPageController {
 
     private final MyPageService myPageService;
 
-
     @GetMapping("/{email}")
     @Tag(name = "MY PAGE")
     @Operation(summary = "유저 정보 조회", description = "유저 정보 조회 API")
     public MyPageDto getMyPageInfo(@PathVariable String email) {
 
         return myPageService.getMyPageInfo(email);
+    }
+
+    @PutMapping("/{email}")
+    @Tag(name = "MY PAGE")
+    @Operation(summary = "유저 정보 수정", description = "유저 정보 수정 API")
+    public MyPageDto updateMyPageInfo(@PathVariable String email, @RequestBody MyPageDto updatedMyPageInfo) {
+
+        return myPageService.updateMyPageInfo(email, updatedMyPageInfo);
     }
 
     @GetMapping("/{id}/cart")
@@ -44,5 +51,4 @@ public class MyPageController {
 
         return myPageService.getViewProduct(id);
     }
-
 }

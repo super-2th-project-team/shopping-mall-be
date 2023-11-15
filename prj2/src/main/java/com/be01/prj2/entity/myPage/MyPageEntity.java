@@ -1,5 +1,6 @@
 package com.be01.prj2.entity.myPage;
 
+import com.be01.prj2.dto.myPage.MyPageDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,5 +47,15 @@ public class MyPageEntity {
         this.profile = profile;
         this.myInfo = myInfo;
         this.address = address;
+    }
+
+    public void updateMyPage(MyPageDto myPageDto) {
+        this.name = myPageDto.getName();
+        this.email = myPageDto.getEmail();
+        this.mobile = myPageDto.getMobile();
+        this.address = myPageDto.getAddress();
+        this.gender = myPageDto.getGender();
+        this.profile = myPageDto.getProfile();
+        this.myInfo = myPageDto.getMyInfo();
     }
 }
