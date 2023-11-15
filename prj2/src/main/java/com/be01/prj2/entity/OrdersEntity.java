@@ -1,11 +1,13 @@
 package com.be01.prj2.entity;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+@Getter
 @Data
 @NoArgsConstructor
 @Entity
@@ -41,4 +43,8 @@ public class OrdersEntity {
 
     @Column(name = "addressee")
     private String addressee;
+
+    @Column(name = "order_quantity")
+    private int orderQuantity;
+
 }

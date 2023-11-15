@@ -2,10 +2,12 @@ package com.be01.prj2.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+@Setter
 @Data
 @NoArgsConstructor
 @Entity
@@ -35,4 +37,5 @@ public class ProductEntity {
 
     @Column(name = "product_img", nullable = false)
     private String productImg;
+
 }
