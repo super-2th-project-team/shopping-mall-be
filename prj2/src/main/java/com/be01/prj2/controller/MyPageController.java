@@ -21,12 +21,12 @@ public class MyPageController {
     private final MyPageService myPageService;
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/{email}")
     @Tag(name = "MY PAGE")
     @Operation(summary = "유저 정보 조회", description = "유저 정보 조회 API")
-    public MyPageDto getMyPageInfo(@PathVariable Long id) {
+    public MyPageDto getMyPageInfo(@PathVariable String email) {
 
-        return myPageService.getMyPageInfo(id);
+        return myPageService.getMyPageInfo(email);
     }
 
     @GetMapping("/{id}/cart")

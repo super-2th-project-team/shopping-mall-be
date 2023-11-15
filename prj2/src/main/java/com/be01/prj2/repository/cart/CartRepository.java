@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface CartRepository extends JpaRepository<CartEntity, Long> {
 
+    // id를 기준으로 장바구니 물품 내역 리스트 조회
     List<CartEntity> findByUserIdx(Long userIdx);
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface MyPageService {
 
-    MyPageDto getMyPageInfo(Long id);
+    MyPageDto getMyPageInfo(String email);
 
     List<CartDto> getCartProduct(Long id);
 

@@ -12,6 +12,7 @@ import com.be01.prj2.repository.myPage.MyPageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Email;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -26,10 +27,10 @@ public class MyPageServiceImpl implements MyPageService {
     private final PurViewRepository purViewRepository;
 
     @Override
-    public MyPageDto getMyPageInfo(Long id) {
+    public MyPageDto getMyPageInfo(String email) {
 
-        // id로 유저 정보 조회
-        MyPageEntity myPageEntity = myPageRepository.findByUserIdx(id);
+        // email로 유저 정보 조회
+        MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
 
         if (myPageEntity == null) {
             throw new NoSuchElementException("유저 정보를 찾을 수 없습니다.");
