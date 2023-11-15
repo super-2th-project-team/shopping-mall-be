@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -31,10 +31,10 @@ public class PurViewEntity {
     private String productImg;
 
     @Column(name = "order_enroll")
-    private LocalDateTime orderEnroll;
+    private Date orderEnroll;
 
     @Builder
-    public PurViewEntity(Long productId, Long userIdx, String productName, int productPrice, String productImg, LocalDateTime orderEnroll) {
+    public PurViewEntity(Long productId, Long userIdx, String productName, int productPrice, String productImg, Date orderEnroll) {
         this.productId = productId;
         this.userIdx = userIdx;
         this.productName = productName;

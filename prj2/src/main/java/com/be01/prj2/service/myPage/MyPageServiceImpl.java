@@ -34,7 +34,8 @@ public class MyPageServiceImpl implements MyPageService {
         if (myPageEntity == null) {
             throw new NoSuchElementException("유저 정보를 찾을 수 없습니다.");
         }
-        return new MyPageDto(myPageEntity.getProfile(), myPageEntity.getMyInfo(), myPageEntity.getAddress());
+        return new MyPageDto(myPageEntity.getName(), myPageEntity.getEmail(), myPageEntity.getMobile(),
+                myPageEntity.getAddress(), myPageEntity.getGender(), myPageEntity.getProfile(), myPageEntity.getMyInfo());
     }
 
     @Override

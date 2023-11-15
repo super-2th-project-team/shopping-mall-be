@@ -17,14 +17,28 @@ public class MyPageEntity {
     @Column(name = "user_idx")
     private Long userIdx;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "mobile")
+    private String mobile;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "gender")
+    private char gender;
+
     @Column(name = "profile")
     private String profile;
 
     @Column(name = "myinfo")
     private String myInfo;
 
-    @Column(name = "address")
-    private String address;
+
 
     @Builder
     public MyPageEntity(Long userIdx, String profile, String myInfo, String address) {

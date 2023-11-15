@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -14,5 +14,5 @@ public class PurViewDto {
     private String productName;
     private int productPrice;
     private String productImg;
-    private LocalDateTime orderEnroll;
+    private Date orderEnroll;
 }
