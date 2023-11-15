@@ -10,6 +10,7 @@ import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.CustomerRepository;
 import com.be01.prj2.repository.SignOutRepository;
 import com.be01.prj2.role.Role;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -134,24 +135,24 @@ public class CustomerService {
 //    }
 
     @Transactional
-    public void signOut(Customer signOutDto){
+    public void signOut(Customer signOutDto) {
         String email = signOutDto.getEmail();
         String password = signOutDto.getPassword();
         String mobile = signOutDto.getMobile();
 
-        if (passwordEncoder.matches(signOutDto.getPassword(), password)) {
-            Optional<Customer> signOutCustomer = customerRepository.findAllByEmailAndMobile(email,mobile);
-           if(signOutCustomer.isPresent()){
-               Customer customer = signOutCustomer.get();
-               customer.setRole(Role.SIGNOUT);
-               customerRepository.save(customer);
-           }else{
-               throw new NotFoundException("해당 회원을 찾을 수 없습니다");
-           }
+        Optional<Customer> signOutCustomer = customerRepository.findAllByEmailAndMobile(email, mobile);
 
-        }
-        else{
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
+        if (signOutCustomer.isPresent()) {
+            Customer customer = signOutCustomer.get();
+
+            if (passwordEncoder.matches(password, customer.getPassword())) {
+                customer.setRole(Role.SIGNOUT);
+                customerRepository.save(customer);
+            } else {
+                throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
+            }
+        } else {
+            throw new IllegalArgumentException("회원이 없습니다");
         }
     }
 }
