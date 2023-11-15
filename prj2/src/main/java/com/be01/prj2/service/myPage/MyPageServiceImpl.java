@@ -6,15 +6,14 @@ import com.be01.prj2.dto.PurViewDto;
 import com.be01.prj2.entity.CartEntity;
 import com.be01.prj2.entity.MyPageEntity;
 import com.be01.prj2.entity.PurViewEntity;
+import com.be01.prj2.exception.MyPageException;
 import com.be01.prj2.repository.cart.CartRepository;
 import com.be01.prj2.repository.purView.PurViewRepository;
 import com.be01.prj2.repository.myPage.MyPageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Email;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
@@ -33,7 +32,7 @@ public class MyPageServiceImpl implements MyPageService {
         MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
 
         if (myPageEntity == null) {
-            throw new NoSuchElementException("유저 정보를 찾을 수 없습니다.");
+            throw new MyPageException("유저 정보를 찾을 수 없습니다.");
         }
         return new MyPageDto(myPageEntity.getName(), myPageEntity.getEmail(), myPageEntity.getMobile(),
                 myPageEntity.getAddress(), myPageEntity.getGender(), myPageEntity.getProfile(), myPageEntity.getMyInfo());
