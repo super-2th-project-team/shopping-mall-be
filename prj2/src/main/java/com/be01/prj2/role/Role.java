@@ -3,7 +3,9 @@ package com.be01.prj2.role;
 public enum Role {
     USER("ROLE_USER"),
 
-    SELLER("ROLE_SELLER");
+    SELLER("ROLE_SELLER"),
+
+    SIGNOUT("ROLE_SIGNOUT");
 
     private String name;
 

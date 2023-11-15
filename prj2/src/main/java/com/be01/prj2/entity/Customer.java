@@ -1,10 +1,7 @@
 package com.be01.prj2.entity;
 
 import com.be01.prj2.role.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +14,7 @@ import java.util.List;
 @Entity
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "customer")

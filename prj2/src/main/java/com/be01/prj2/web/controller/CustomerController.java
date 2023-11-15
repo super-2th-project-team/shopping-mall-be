@@ -1,7 +1,10 @@
 package com.be01.prj2.web.controller;
 
 import com.be01.prj2.dto.LoginDto;
+import com.be01.prj2.dto.SignOutDto;
 import com.be01.prj2.dto.SignupDto;
+import com.be01.prj2.entity.Customer;
+import com.be01.prj2.entity.SignOut;
 import com.be01.prj2.jwt.TokenPair;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.CustomerRepository;
@@ -36,7 +39,7 @@ public class CustomerController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto, HttpServletResponse httpServletResponse){
         String accessToken = customerService.login(loginDto);
-        String refreshToken = tokenProvider.createRefreshToken(loginDto.getEmail(), loginDto.getRole());
+        String refreshToken = tokenProvider.createRefreshToken(loginDto.getEmail());
         redisTemplate.opsForValue().set(loginDto.getEmail(), accessToken, Duration.ofSeconds(1800));
         redisTemplate.opsForValue().set("RF :" + loginDto.getEmail(), refreshToken, Duration.ofHours(1L));
         httpServletResponse.setHeader("AccessToken", accessToken);
@@ -45,14 +48,27 @@ public class CustomerController {
     }
 
     @PostMapping("/refresh")
-    private ResponseEntity<?> refresh(@RequestHeader("RefreshToken") String refreshToken) throws IllegalAccessException {
+    private ResponseEntity<?> refresh(@RequestHeader("RefreshToken") String refreshToken, HttpServletResponse httpServletResponse) throws IllegalAccessException {
         String key = tokenProvider.getEmailBytoken(refreshToken);
-        Role role = tokenProvider.getRoleByToken(refreshToken);
+//        Role role = tokenProvider.getRoleByToken(refreshToken);
 
-        customerService.createAccessTokenByRefresh(key, role);
+        String accessTokenByRefresh = customerService.createAccessTokenByRefresh(key);
+        httpServletResponse.setHeader("AccessToken", accessTokenByRefresh);
+        redisTemplate.opsForValue().set(key, accessTokenByRefresh, Duration.ofSeconds(1800));
         return ResponseEntity.status(HttpStatus.OK.value()).body("토큰이 재발급 되었습니다");
     }
+    @PostMapping("/logout")
+    public ResponseEntity<?>  logout(@RequestHeader("AccessToken") String accessToken){
+        customerService.logout(accessToken);
+        return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
+    }
 
+    @PostMapping("/signout")
+    public ResponseEntity<?> signout(@RequestBody Customer signOutDto){
+
+        customerService.signOut(signOutDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("회원 탈퇴가 완료되었습니다. 이용해주셔서 감사합니다");
+    }
 
 
 }

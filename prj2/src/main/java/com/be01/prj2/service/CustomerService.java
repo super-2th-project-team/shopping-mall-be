@@ -1,11 +1,14 @@
 package com.be01.prj2.service;
 
 import com.be01.prj2.dto.LoginDto;
+import com.be01.prj2.dto.SignOutDto;
 import com.be01.prj2.dto.SignupDto;
 import com.be01.prj2.entity.Customer;
+import com.be01.prj2.entity.SignOut;
 import com.be01.prj2.exception.NotFoundException;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.CustomerRepository;
+import com.be01.prj2.repository.SignOutRepository;
 import com.be01.prj2.role.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +24,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestHeader;
+
+import java.time.Duration;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final SignOutRepository signOutRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
@@ -39,19 +47,22 @@ public class CustomerService {
         String email = signupDto.getEmail();
         String password = signupDto.getPassword();
         String pwdck = signupDto.getPwdck();
-        Role role = signupDto.getRole(); //일반 유저인지 판매자인지 구분
+        String mobile = signupDto.getMobile();
+        //Role role = signupDto.getRole(); //일반 유저인지 판매자인지 구분
 
-        if (customerRepository.existsByEmail(email)){
+        if (customerRepository.existsByEmailAndRole(email, Role.USER) ) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("이미 사용중인 이메일입니다.");
         }
         if(!password.equals(pwdck)){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("비밀번호 확인이 비밀번호와 다릅니다.");
         }
+
         Customer customer = Customer.builder()
                 .name(name)
                 .email(email)
                 .password(passwordEncoder.encode(password))
-                .role(role)
+                .mobile(mobile)
+                .role(Role.USER)
                 .build();
         customerRepository.save(customer);
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 완료입니다");
@@ -61,7 +72,6 @@ public class CustomerService {
     public String login(LoginDto loginDto) {
         String email = loginDto.getEmail();
         String password = loginDto.getPassword();
-        Role role = loginDto.getRole();
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
@@ -70,28 +80,78 @@ public class CustomerService {
             customerRepository.findByEmail(email)
                     .orElseThrow(() -> new NotFoundException("회원이 없습니다"));
 
-            if (redisTemplate.opsForValue().get("logout: " + loginDto.getEmail()) != null) {
+            if (redisTemplate.opsForValue().get("logout : " + loginDto.getEmail()) != null) {
                 redisTemplate.delete("logout: " + loginDto.getEmail());
             }
-            return tokenProvider.createAccessToken(email, role);
+            return tokenProvider.createAccessToken(email);
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new BadCredentialsException("잘못된 자격 증명 입니다.");
         }
     }
+    //리프레쉬로 access 토큰 재발급
     @Transactional
-    public void createAccessTokenByRefresh(String email, Role role){
+    public String createAccessTokenByRefresh(String email) {
 
-        if(redisTemplate.opsForValue().get("RF :" + email) != null){
-            tokenProvider.createAccessToken(email, role);
+        if (redisTemplate.opsForValue().get("RF :" + email) != null) {
+            return tokenProvider.createAccessToken(email);
+
         }
-        else {
-            return;
-        }
+        return null;
+    }
+    //로그아웃 기능
+    @Transactional
+    public void logout(@RequestHeader("AccessToken") String accessToken){
+        redisTemplate.opsForValue().set("logout : "+ tokenProvider.getEmailBytoken(accessToken), "logout", Duration.ofSeconds(1800));
+        redisTemplate.delete(tokenProvider.getEmailBytoken(accessToken));
+        redisTemplate.delete("RF :" + tokenProvider.getEmailBytoken(accessToken));
+
     }
 
+//    @Transactional
+//    public void signOut(SignOutDto signOutDto){
+//
+//        String email = signOutDto.getEmail();
+//        String password = signOutDto.getPassword();
+//        String mobile = signOutDto.getMobile();
+//
+//        try {
+//            Customer customer = customerRepository.findByEmail(email)
+//                    .orElseThrow(() -> new NotFoundException("없는 회원 입니다"));
+//            customerRepository.delete(customer);
+//
+//        }catch (Exception e){
+//            throw new NotFoundException("없는 회원 입니다");
+//        }
+//
+//        SignOut signOut = SignOut.builder()
+//                .email(email)
+//                .mobile(mobile)
+//                .build();
+//
+//        signOutRepository.save(signOut);
+//    }
 
+    @Transactional
+    public void signOut(Customer signOutDto){
+        String email = signOutDto.getEmail();
+        String password = signOutDto.getPassword();
+        String mobile = signOutDto.getMobile();
 
+        if (passwordEncoder.matches(signOutDto.getPassword(), password)) {
+            Optional<Customer> signOutCustomer = customerRepository.findAllByEmailAndMobile(email,mobile);
+           if(signOutCustomer.isPresent()){
+               Customer customer = signOutCustomer.get();
+               customer.setRole(Role.SIGNOUT);
+               customerRepository.save(customer);
+           }else{
+               throw new NotFoundException("해당 회원을 찾을 수 없습니다");
+           }
 
+        }
+        else{
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
+        }
+    }
 }

@@ -40,10 +40,10 @@ public class TokenProvider {
    }
 
     //토큰 생성
-    public String createAccessToken(String email, Role role){
+    public String createAccessToken(String email){
 
         Claims claims = Jwts.claims().setSubject(email);
-        claims.put("role", role.getName());
+        claims.put("role", Role.USER);
         Date now = new Date();
         Date acceessValidate = new Date(now.getTime() + accesstokenValidSecond);
 
@@ -56,10 +56,10 @@ public class TokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
-    public String createRefreshToken(String email, Role role){
+    public String createRefreshToken(String email){
 
         Claims claims = Jwts.claims().setSubject(email);
-        claims.put("role", role.getName());
+        claims.put("role", Role.USER);
         Date now = new Date();
         Date refreshValidate = new Date(now.getTime() + refreshtokenValidSecond);
 
@@ -117,20 +117,20 @@ public class TokenProvider {
         return claims.isEmpty() ? null : claims.get("sub", String.class);
     }
 
-    public Role getRoleByToken(String token) throws IllegalAccessException {
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(token)
-                    .getBody();
-            Role role = Role.valueOf(claims.get("role", String.class));
-
-            return role;
-
-        } catch (Exception e) {
-            // 예외 처리 - 토큰이 유효하지 않을 경우 또는 역할 정보가 없을 경우
-            throw new IllegalAccessException("유효하지 않는 역할정보 입니다.");
-        }
+//    public Role getRoleByToken(String token) throws IllegalAccessException {
+//        try {
+//            Claims claims = Jwts.parser()
+//                    .setSigningKey(secretKey)
+//                    .parseClaimsJws(token)
+//                    .getBody();
+//            Role role = Role.valueOf(claims.get("role", String.class));
+//
+//            return role;
+//
+//        } catch (Exception e) {
+//            // 예외 처리 - 토큰이 유효하지 않을 경우 또는 역할 정보가 없을 경우
+//            throw new IllegalAccessException("유효하지 않는 역할정보 입니다.");
+//        }
     }
 
-}
+

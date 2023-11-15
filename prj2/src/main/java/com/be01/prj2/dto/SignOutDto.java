@@ -1,7 +1,8 @@
 package com.be01.prj2.dto;
 
-import com.be01.prj2.role.Role;
 import com.be01.prj2.entity.Customer;
+import com.be01.prj2.entity.SignOut;
+import com.be01.prj2.role.Role;
 import lombok.*;
 
 @Getter
@@ -10,23 +11,25 @@ import lombok.*;
 @ToString
 @Builder
 @AllArgsConstructor
-public class SignupDto {
+public class SignOutDto {
 
-    private String name;
     private String email;
     private String password;
-    private String pwdck;
     private String mobile;
     private Role role;
 
     public Customer toEntity(){
         return Customer.builder()
-                .name(name)
                 .email(email)
+                .password(password)
                 .mobile(mobile)
-                .role(role)
                 .build();
     }
 
-
+    public SignOut toOutEntity(){
+        return SignOut.builder()
+                .email(email)
+                .mobile(mobile)
+                .build();
+    }
 }
