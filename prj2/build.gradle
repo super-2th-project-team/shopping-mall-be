@@ -49,7 +49,9 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     //jwt 라이브러리
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 
     //redis 환경 구성
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'

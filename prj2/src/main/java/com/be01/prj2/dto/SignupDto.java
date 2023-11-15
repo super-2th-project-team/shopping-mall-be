@@ -1,15 +1,8 @@
-package dto;
+package com.be01.prj2.dto;
 
 import com.be01.prj2.role.Role;
-import entity.Customer;
+import com.be01.prj2.entity.Customer;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +10,7 @@ import java.util.List;
 @ToString
 @Builder
 @AllArgsConstructor
-public class SingupDto {
+public class SignupDto {
 
     private String name;
     private String email;

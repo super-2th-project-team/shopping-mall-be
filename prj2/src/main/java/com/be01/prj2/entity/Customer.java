@@ -1,4 +1,4 @@
-package entity;
+package com.be01.prj2.entity;
 
 import com.be01.prj2.role.Role;
 import lombok.AllArgsConstructor;

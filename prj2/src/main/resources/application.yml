@@ -15,7 +15,7 @@ spring:
 security:
   jwt:
     header: Authorization
-    secret: ????????????
+    secret: 시크릿키이야아아아아아아
     token-validity-in-seconds: 604800
 
 

@@ -1,0 +1,58 @@
+package com.be01.prj2.web.controller;
+
+import com.be01.prj2.dto.LoginDto;
+import com.be01.prj2.dto.SignupDto;
+import com.be01.prj2.jwt.TokenPair;
+import com.be01.prj2.jwt.TokenProvider;
+import com.be01.prj2.repository.CustomerRepository;
+import com.be01.prj2.role.Role;
+import com.be01.prj2.service.CustomerService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.time.Duration;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api")
+@Slf4j
+public class CustomerController {
+
+    private final CustomerService customerService;
+    private final CustomerRepository customerRepository;
+    private final TokenProvider tokenProvider;
+    private final RedisTemplate<String , String > redisTemplate;
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody SignupDto signupDto){
+        return customerService.register(signupDto);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto, HttpServletResponse httpServletResponse){
+        String accessToken = customerService.login(loginDto);
+        String refreshToken = tokenProvider.createRefreshToken(loginDto.getEmail(), loginDto.getRole());
+        redisTemplate.opsForValue().set(loginDto.getEmail(), accessToken, Duration.ofSeconds(1800));
+        redisTemplate.opsForValue().set("RF :" + loginDto.getEmail(), refreshToken, Duration.ofHours(1L));
+        httpServletResponse.setHeader("AccessToken", accessToken);
+        httpServletResponse.setHeader("RefreshToken", refreshToken);
+        return ResponseEntity.status(HttpStatus.OK.value()).body("로그인 되었습니다");
+    }
+
+    @PostMapping("/refresh")
+    private ResponseEntity<?> refresh(@RequestHeader("RefreshToken") String refreshToken) throws IllegalAccessException {
+        String key = tokenProvider.getEmailBytoken(refreshToken);
+        Role role = tokenProvider.getRoleByToken(refreshToken);
+
+        customerService.createAccessTokenByRefresh(key, role);
+        return ResponseEntity.status(HttpStatus.OK.value()).body("토큰이 재발급 되었습니다");
+    }
+
+
+
+}

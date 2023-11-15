@@ -1,13 +1,11 @@
-package repository.customUserDetails;
+package com.be01.prj2.repository.customUserDetails;
 
-import entity.Customer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import com.be01.prj2.entity.Customer;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import repository.CustomerRepository;
+import com.be01.prj2.repository.CustomerRepository;
 
 @Service
 public class CustomUserDetails implements UserDetailsService {
