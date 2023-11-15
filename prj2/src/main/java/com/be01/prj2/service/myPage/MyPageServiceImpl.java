@@ -1,14 +1,14 @@
 package com.be01.prj2.service.myPage;
 
-import com.be01.prj2.dto.CartDto;
-import com.be01.prj2.dto.MyPageDto;
-import com.be01.prj2.dto.PurViewDto;
-import com.be01.prj2.entity.CartEntity;
-import com.be01.prj2.entity.MyPageEntity;
-import com.be01.prj2.entity.PurViewEntity;
-import com.be01.prj2.exception.MyPageException;
-import com.be01.prj2.repository.cart.CartRepository;
-import com.be01.prj2.repository.purView.PurViewRepository;
+import com.be01.prj2.dto.myPage.CartDto;
+import com.be01.prj2.dto.myPage.MyPageDto;
+import com.be01.prj2.dto.myPage.PurViewDto;
+import com.be01.prj2.entity.myPage.CartEntity;
+import com.be01.prj2.entity.myPage.MyPageEntity;
+import com.be01.prj2.entity.myPage.PurViewEntity;
+import com.be01.prj2.exception.myPage.MyPageException;
+import com.be01.prj2.repository.myPage.CartRepository;
+import com.be01.prj2.repository.myPage.PurViewRepository;
 import com.be01.prj2.repository.myPage.MyPageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,6 +44,10 @@ public class MyPageServiceImpl implements MyPageService {
         // id로 유저 장바구니 물품 리스트 조회
         List<CartEntity> cartEntityList = cartRepository.findByUserIdx(id);
 
+        if (cartEntityList == null || cartEntityList.isEmpty()) {
+            throw new MyPageException("장바구니 정보를 찾을 수 없습니다.");
+        }
+
         return cartEntityList.stream()
                 .map(entity -> new CartDto(entity.getProductId(), entity.getCartQuantity(), entity.getCartStatus(), entity.getTotalPrice()))
                 .collect(Collectors.toList());
@@ -54,6 +58,10 @@ public class MyPageServiceImpl implements MyPageService {
 
         // id로 구매했던 물품 조회
         List<PurViewEntity> purViewEntityList = purViewRepository.findByUserIdx(id);
+
+        if (purViewEntityList == null || purViewEntityList.isEmpty()) {
+            throw new MyPageException("구매 이력을 찾을 수 없습니다.");
+        }
 
         return purViewEntityList.stream()
                 .map(entity -> new PurViewDto(entity.getProductName(), entity.getProductPrice(), entity.getProductImg(), entity.getOrderEnroll()))

@@ -1,8 +1,8 @@
 package com.be01.prj2.service.myPage;
 
-import com.be01.prj2.dto.CartDto;
-import com.be01.prj2.dto.MyPageDto;
-import com.be01.prj2.dto.PurViewDto;
+import com.be01.prj2.dto.myPage.CartDto;
+import com.be01.prj2.dto.myPage.MyPageDto;
+import com.be01.prj2.dto.myPage.PurViewDto;
 
 import java.util.List;
 

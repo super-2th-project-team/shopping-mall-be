@@ -1,6 +1,6 @@
 package com.be01.prj2.repository.myPage;
 
-import com.be01.prj2.entity.MyPageEntity;
+import com.be01.prj2.entity.myPage.MyPageEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

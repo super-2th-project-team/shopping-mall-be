@@ -1,4 +1,4 @@
-package com.be01.prj2.exception;
+package com.be01.prj2.exception.myPage;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

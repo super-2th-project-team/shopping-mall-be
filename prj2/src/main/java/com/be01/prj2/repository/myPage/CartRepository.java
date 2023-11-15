@@ -1,6 +1,6 @@
-package com.be01.prj2.repository.cart;
+package com.be01.prj2.repository.myPage;
 
-import com.be01.prj2.entity.CartEntity;
+import com.be01.prj2.entity.myPage.CartEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

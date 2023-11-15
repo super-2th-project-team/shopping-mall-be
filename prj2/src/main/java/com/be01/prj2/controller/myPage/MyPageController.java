@@ -1,8 +1,8 @@
-package com.be01.prj2.controller;
+package com.be01.prj2.controller.myPage;
 
-import com.be01.prj2.dto.CartDto;
-import com.be01.prj2.dto.MyPageDto;
-import com.be01.prj2.dto.PurViewDto;
+import com.be01.prj2.dto.myPage.CartDto;
+import com.be01.prj2.dto.myPage.MyPageDto;
+import com.be01.prj2.dto.myPage.PurViewDto;
 import com.be01.prj2.service.myPage.MyPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

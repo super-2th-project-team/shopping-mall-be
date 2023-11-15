@@ -1,4 +1,4 @@
-package com.be01.prj2.entity;
+package com.be01.prj2.entity.myPage;
 
 import lombok.Builder;
 import lombok.Getter;

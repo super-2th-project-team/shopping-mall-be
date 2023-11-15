@@ -1,4 +1,4 @@
-package com.be01.prj2.dto;
+package com.be01.prj2.dto.myPage;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
