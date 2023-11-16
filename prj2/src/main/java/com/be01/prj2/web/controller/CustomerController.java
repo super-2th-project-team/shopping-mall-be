@@ -1,14 +1,11 @@
 package com.be01.prj2.web.controller;
 
 import com.be01.prj2.dto.LoginDto;
-import com.be01.prj2.dto.SignOutDto;
+
 import com.be01.prj2.dto.SignupDto;
 import com.be01.prj2.entity.Customer;
-import com.be01.prj2.entity.SignOut;
-import com.be01.prj2.jwt.TokenPair;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.CustomerRepository;
-import com.be01.prj2.role.Role;
 import com.be01.prj2.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +55,7 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK.value()).body("토큰이 재발급 되었습니다");
     }
     @PostMapping("/logout")
-    public ResponseEntity<?>  logout(@RequestHeader("AccessToken") String accessToken){
+    public ResponseEntity<?>  logout(@RequestHeader("AccessToken")String accessToken){
         customerService.logout(accessToken);
         return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
     }
@@ -69,11 +66,5 @@ public class CustomerController {
         customerService.signOut(signOutDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("회원 탈퇴가 완료되었습니다. 이용해주셔서 감사합니다");
     }
-
-    @GetMapping("/test")
-    public ResponseEntity<?> test(String test){
-        return ResponseEntity.status(HttpStatus.OK).body("테스트 성공입니다");
-    }
-
 
 }

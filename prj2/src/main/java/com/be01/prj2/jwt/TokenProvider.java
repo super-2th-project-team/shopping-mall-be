@@ -91,7 +91,7 @@ public class TokenProvider {
 
     //토큰 값 가져오기
     public String resolveToken(HttpServletRequest request){
-        return request.getHeader("Token");
+        return request.getHeader("Accesstoken");
     }
     public boolean validateToken(String jwtToken) {
         try{
@@ -117,20 +117,11 @@ public class TokenProvider {
         return claims.isEmpty() ? null : claims.get("sub", String.class);
     }
 
-//    public Role getRoleByToken(String token) throws IllegalAccessException {
-//        try {
-//            Claims claims = Jwts.parser()
-//                    .setSigningKey(secretKey)
-//                    .parseClaimsJws(token)
-//                    .getBody();
-//            Role role = Role.valueOf(claims.get("role", String.class));
-//
-//            return role;
-//
-//        } catch (Exception e) {
-//            // 예외 처리 - 토큰이 유효하지 않을 경우 또는 역할 정보가 없을 경우
-//            throw new IllegalAccessException("유효하지 않는 역할정보 입니다.");
-//        }
+    public String findRoleByToken(String token){
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+
+        return claims.isEmpty() ? null : claims.get("role", String.class);
     }
+}
 
 
