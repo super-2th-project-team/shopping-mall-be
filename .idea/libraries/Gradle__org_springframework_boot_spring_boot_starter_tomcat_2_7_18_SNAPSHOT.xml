@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:2.7.18-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework.boot" artifactId="spring-boot-starter-tomcat" version="2.7.18-SNAPSHOT" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-tomcat/2.7.18-SNAPSHOT/a8acd8f0ff3444c180eaba5e602f406b8e49468b/spring-boot-starter-tomcat-2.7.18-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-tomcat/2.7.18-SNAPSHOT/ed441c8a89d07e7fc65ac6754ee88dd111325cfa/spring-boot-starter-tomcat-2.7.18-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

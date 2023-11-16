@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework:spring-context:5.3.31-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework" artifactId="spring-context" version="5.3.31-SNAPSHOT" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context/5.3.31-SNAPSHOT/2559abf59789294fb85a4f6c53e21fe3d5f0a323/spring-context-5.3.31-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context/5.3.31-SNAPSHOT/65837ab22b995fdb7cd4ffec03df87b3589dce85/spring-context-5.3.31-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
