@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework:spring-orm:5.3.31-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework" artifactId="spring-orm" version="5.3.31-SNAPSHOT" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.3.31-SNAPSHOT/583e200ced3b602739320a0e35eac5f7df95a0f4/spring-orm-5.3.31-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/5.3.31-SNAPSHOT/ee720d70ad263258d80a86121300da01dc974f93/spring-orm-5.3.31-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
