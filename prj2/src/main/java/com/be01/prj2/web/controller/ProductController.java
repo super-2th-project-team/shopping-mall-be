@@ -21,5 +21,7 @@ public class ProductController {
     public List<ProductEntity> getAllProducts() {
         return productService.getAllProducts();
     }
+
+
 }
 
