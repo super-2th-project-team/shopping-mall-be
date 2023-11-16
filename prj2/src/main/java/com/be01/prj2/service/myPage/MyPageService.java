@@ -15,4 +15,8 @@ public interface MyPageService {
     List<PurViewDto> getViewProduct(Long id);
 
     public MyPageDto updateMyPageInfo(String email, MyPageDto updateMtPageInfo);
+
+    int getPay(String email);
+
+    int chargePay(String email, int mount);
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -50,5 +51,23 @@ public class MyPageController {
     public List<PurViewDto> getViewProduct(@PathVariable Long id) {
 
         return myPageService.getViewProduct(id);
+    }
+
+    @GetMapping("/{email}/pay")
+    @Tag(name = "MY PAGE")
+    @Operation(summary = "페이머니 조회", description = "페이머니 조회 API")
+    public int getPay(@PathVariable String email) {
+
+        return myPageService.getPay(email);
+    }
+
+    @PostMapping("/{email}/pay")
+    @Tag(name = "MY PAGE")
+    @Operation(summary = "페이머니 충전", description = "페이머니 충전 API")
+    public int chargePay(@PathVariable String email, @RequestBody Map<String, Integer> payload) {
+
+        int amount = payload.get("amount");
+
+        return myPageService.chargePay(email, amount);
     }
 }
