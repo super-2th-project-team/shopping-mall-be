@@ -1,5 +1,6 @@
 package com.be01.prj2.service;
 
+import com.be01.prj2.dto.AddExtraInfoDto;
 import com.be01.prj2.dto.LoginDto;
 import com.be01.prj2.dto.SignOutDto;
 import com.be01.prj2.dto.SignupDto;
@@ -51,13 +52,21 @@ public class CustomerService {
         String mobile = signupDto.getMobile();
         //Role role = signupDto.getRole(); //일반 유저인지 판매자인지 구분
 
-        if (customerRepository.existsByEmailAndRole(email, Role.USER) ) {
+        if (customerRepository.existsByEmailAndRole(email, Role.USER)) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("이미 사용중인 이메일입니다.");
         }
         if(!password.equals(pwdck)){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("비밀번호 확인이 비밀번호와 다릅니다.");
         }
-
+        if(customerRepository.findByEmailAndMobile(email, mobile).isPresent()){
+            Optional<Customer> customer = customerRepository.findByEmailAndMobile(email, mobile);
+            if(customer.isPresent()){
+                Customer reJoin = customer.get();
+                reJoin.setRole(Role.USER);
+                customerRepository.save(reJoin);
+                return  ResponseEntity.status(HttpStatus.FOUND).body("재가입 회원입니다.");
+            }
+        }
         Customer customer = Customer.builder()
                 .name(name)
                 .email(email)
@@ -73,6 +82,7 @@ public class CustomerService {
     public String login(LoginDto loginDto) {
         String email = loginDto.getEmail();
         String password = loginDto.getPassword();
+
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
@@ -97,7 +107,6 @@ public class CustomerService {
 
         if (redisTemplate.opsForValue().get("RF :" + email) != null) {
             return tokenProvider.createAccessToken(email);
-
         }
         return null;
     }
@@ -107,32 +116,7 @@ public class CustomerService {
         redisTemplate.opsForValue().set("logout : "+ tokenProvider.getEmailBytoken(accessToken), "logout", Duration.ofSeconds(1800));
         redisTemplate.delete(tokenProvider.getEmailBytoken(accessToken));
         redisTemplate.delete("RF :" + tokenProvider.getEmailBytoken(accessToken));
-
     }
-
-//    @Transactional
-//    public void signOut(SignOutDto signOutDto){
-//
-//        String email = signOutDto.getEmail();
-//        String password = signOutDto.getPassword();
-//        String mobile = signOutDto.getMobile();
-//
-//        try {
-//            Customer customer = customerRepository.findByEmail(email)
-//                    .orElseThrow(() -> new NotFoundException("없는 회원 입니다"));
-//            customerRepository.delete(customer);
-//
-//        }catch (Exception e){
-//            throw new NotFoundException("없는 회원 입니다");
-//        }
-//
-//        SignOut signOut = SignOut.builder()
-//                .email(email)
-//                .mobile(mobile)
-//                .build();
-//
-//        signOutRepository.save(signOut);
-//    }
 
     @Transactional
     public void signOut(Customer signOutDto) {
@@ -155,4 +139,24 @@ public class CustomerService {
             throw new IllegalArgumentException("회원이 없습니다");
         }
     }
+
+    @Transactional
+    public void addExtraInfo(@RequestHeader("AccessToken")String token, AddExtraInfoDto addExtraInfoDto){
+        char gender = addExtraInfoDto.getGender();
+        String address = addExtraInfoDto.getAddress();
+
+        String email = tokenProvider.getEmailBytoken(token);
+        Optional<Customer> customer = customerRepository.findByEmail(email);
+
+        if(customer.isPresent()){
+            Customer add = customer.get();
+            add.setGender(gender);
+            add.setAddress(address);
+            customerRepository.save(add);
+        }
+        else{
+            throw new NotFoundException("없는 회원 입니다");
+        }
+    }
+
 }

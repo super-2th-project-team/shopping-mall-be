@@ -1,5 +1,6 @@
 package com.be01.prj2.web.controller;
 
+import com.be01.prj2.dto.AddExtraInfoDto;
 import com.be01.prj2.dto.LoginDto;
 
 import com.be01.prj2.dto.SignupDto;
@@ -65,6 +66,12 @@ public class CustomerController {
 
         customerService.signOut(signOutDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("회원 탈퇴가 완료되었습니다. 이용해주셔서 감사합니다");
+    }
+
+    @PostMapping("/addInfo")
+    private ResponseEntity<?> addInfo(@RequestHeader("AccessToken")String token ,@RequestBody AddExtraInfoDto addExtraInfoDto){
+        customerService.addExtraInfo(token, addExtraInfoDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("저장 되었습니다!");
     }
 
 }
