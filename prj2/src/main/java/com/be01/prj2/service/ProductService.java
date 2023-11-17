@@ -2,11 +2,10 @@ package com.be01.prj2.service;
 
 import com.be01.prj2.dto.productsDto.SellDto;
 import com.be01.prj2.entity.Customer;
-import com.be01.prj2.entity.category.Category;
 import com.be01.prj2.entity.product.Product;
 
 import com.be01.prj2.jwt.TokenProvider;
-import com.be01.prj2.repository.CategoryRepository;
+
 import com.be01.prj2.repository.CustomerRepository;
 import com.be01.prj2.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,18 +25,19 @@ public class ProductService {
     private final CustomerService customerService;
     private final TokenProvider tokenProvider;
     private final CustomerRepository customerRepository;
-    private final CategoryRepository categoryRepository;
 
     @Transactional
     public Product productRegister(SellDto sellDto, Long userId) {
-        Customer seller = customerRepository.findCustomerByUserId(userId);
+        Optional<Customer> isSeller = customerRepository.findByUserId(userId);
 
-        if (seller!=null) {
+        if (isSeller.isPresent()) {
+            Customer customer = isSeller.get();
 
-            Category category = getCategoryOrCreateIfNotExists(String.valueOf(sellDto.getCategory()));
+            List<String> color = Arrays.asList("red", "blue", "green", "beige");
+            List<String> size = Arrays.asList("s", "m", "L", "XL", "FREE");
+
 
             Product product = Product.builder()
-                    .sellerId(sellDto.getSellerID())
                     .productName(sellDto.getProductName())
                     .productPrice(sellDto.getProductPrice())
                     .productInfo(sellDto.getProductInfo())
@@ -43,7 +45,11 @@ public class ProductService {
                     .productSell(sellDto.getProductSell())
                     .productEnroll(sellDto.getProductEnroll())
                     .productImg(sellDto.getProductImg())
-                    .category(category)
+                    .category(sellDto.getCategory())
+                    .subCategory(sellDto.getSubCategory())
+                    .color(color.subList(0, 3))
+                    .size(size.subList(0, 4))
+                    .userId(customer)
                     .build();
             return productRepository.save(product);
         } else {
@@ -51,13 +57,4 @@ public class ProductService {
         }
     }
 
-    private Category getCategoryOrCreateIfNotExists(String categoryName) {
-        Optional<Category> existingCategory = categoryRepository.findByCategoryName(categoryName);
-
-        return existingCategory.orElseGet(() -> {
-            // 저장되지 않은 Category인 경우 새로 생성하여 저장
-            Category newCategory = Category.builder().categoryName(categoryName).build();
-            return categoryRepository.save(newCategory);
-        });
-    }
 }

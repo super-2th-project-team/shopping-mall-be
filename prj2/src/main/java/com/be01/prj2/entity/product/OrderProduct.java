@@ -1,5 +1,6 @@
 package com.be01.prj2.entity.product;
 
+import com.be01.prj2.entity.Customer;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,5 +23,10 @@ public class OrderProduct {
 
 
     @ManyToOne
+    @JoinColumn(name = "productId")
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private Customer customer;
 }
