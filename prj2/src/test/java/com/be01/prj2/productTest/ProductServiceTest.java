@@ -1,7 +1,7 @@
 //package com.be01.prj2.productTest;
 //
-//import com.be01.prj2.entity.ProductEntity;
-//import com.be01.prj2.service.ProductService;
+
+
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;

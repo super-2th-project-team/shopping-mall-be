@@ -1,8 +1,8 @@
 spring:
   datasource:
     username: root
-    password: 12341234
-    url: jdbc:mysql://localhost:3306/pj2
+    password: p@ssw0rd
+    url: jdbc:mysql://localhost:3306/shopping
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: localhost
