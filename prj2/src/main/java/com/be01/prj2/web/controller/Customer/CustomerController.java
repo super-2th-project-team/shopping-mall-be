@@ -1,4 +1,4 @@
-package com.be01.prj2.web.controller;
+package com.be01.prj2.web.controller.Customer;
 
 import com.be01.prj2.dto.AddExtraInfoDto;
 import com.be01.prj2.dto.LoginDto;
@@ -40,9 +40,11 @@ public class CustomerController {
     }
 
     @PostMapping("/login")
-    public Map<String ,String > login(@RequestBody LoginDto loginDto, HttpServletResponse httpServletResponse) throws JsonProcessingException {
+    public Map<String ,String > login(@RequestBody LoginDto loginDto, HttpServletResponse httpServletResponse) {
         String accessToken = customerService.login(loginDto);
         String refreshToken = tokenProvider.createRefreshToken(loginDto.getEmail());
+
+
 
         redisTemplate.opsForValue().set(loginDto.getEmail(), accessToken, Duration.ofSeconds(1800));
         redisTemplate.opsForValue().set("RF :" + loginDto.getEmail(), refreshToken, Duration.ofHours(1L));
@@ -54,11 +56,10 @@ public class CustomerController {
         response.put("message", "로그인 되었습니다");
         response.put("access_token", accessToken);
         response.put("refresh_token", refreshToken);
+        response.put("http_status", HttpStatus.OK.toString());
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResponse = objectMapper.writeValueAsString(response);
 
-        log.info("JSON Response: {}", jsonResponse);
+
         return response;
     }
 

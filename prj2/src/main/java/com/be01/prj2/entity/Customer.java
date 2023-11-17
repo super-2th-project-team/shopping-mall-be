@@ -1,5 +1,6 @@
 package com.be01.prj2.entity;
 
+import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.role.Role;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +34,9 @@ public class Customer implements UserDetails {
     private String address;
     private String profileImg;
     private Role role;
+
+    @OneToMany(mappedBy = "sellerId")
+    private List<Product> products;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
