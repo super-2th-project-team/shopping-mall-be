@@ -27,10 +27,10 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public Product productRegister(SellDto sellDto, String email) {
-        Optional<Customer> seller = customerRepository.findByEmail(email);
+    public Product productRegister(SellDto sellDto, Long userId) {
+        Customer seller = customerRepository.findCustomerByUserId(userId);
 
-        if (seller.isPresent()) {
+        if (seller!=null) {
 
             Category category = getCategoryOrCreateIfNotExists(String.valueOf(sellDto.getCategory()));
 

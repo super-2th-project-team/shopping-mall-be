@@ -37,7 +37,7 @@ public class ProductController {
         String email = tokenProvider.getEmailBytoken(token);
         Customer seller = customerRepository.findCustomerByEmail(email);
         Long sellerId= seller.getUserId();
-        productService.productRegister(sellDto, email);
+        productService.productRegister(sellDto, sellerId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("물품 등록이 완료 되었습니다");
     }
