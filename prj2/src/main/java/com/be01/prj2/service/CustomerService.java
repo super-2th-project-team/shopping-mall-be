@@ -109,7 +109,7 @@ public class CustomerService {
     }
     //로그아웃 기능
     @Transactional
-    public void logout(@RequestHeader("AccessToken") String accessToken){
+    public void logout(@RequestHeader("access_token") String accessToken){
         redisTemplate.opsForValue().set("logout : "+ tokenProvider.getEmailBytoken(accessToken), "logout", Duration.ofSeconds(1800));
         redisTemplate.delete(tokenProvider.getEmailBytoken(accessToken));
         redisTemplate.delete("RF :" + tokenProvider.getEmailBytoken(accessToken));
@@ -138,7 +138,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public void addExtraInfo(@RequestHeader("AccessToken")String token, AddExtraInfoDto addExtraInfoDto){
+    public void addExtraInfo(@RequestHeader("access_token")String token, AddExtraInfoDto addExtraInfoDto){
         char gender = addExtraInfoDto.getGender();
         String address = addExtraInfoDto.getAddress();
 

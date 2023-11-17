@@ -8,6 +8,8 @@ import com.be01.prj2.entity.Customer;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.CustomerRepository;
 import com.be01.prj2.service.CustomerService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,8 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,23 +40,35 @@ public class CustomerController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto loginDto, HttpServletResponse httpServletResponse){
+    public Map<String ,String > login(@RequestBody LoginDto loginDto, HttpServletResponse httpServletResponse) throws JsonProcessingException {
         String accessToken = customerService.login(loginDto);
         String refreshToken = tokenProvider.createRefreshToken(loginDto.getEmail());
+
         redisTemplate.opsForValue().set(loginDto.getEmail(), accessToken, Duration.ofSeconds(1800));
         redisTemplate.opsForValue().set("RF :" + loginDto.getEmail(), refreshToken, Duration.ofHours(1L));
-        httpServletResponse.setHeader("AccessToken", accessToken);
-        httpServletResponse.setHeader("RefreshToken", refreshToken);
-        return ResponseEntity.status(HttpStatus.OK.value()).body("로그인 되었습니다");
+        httpServletResponse.addCookie(new Cookie("access_token", accessToken));
+        httpServletResponse.addCookie(new Cookie("refresh_token", refreshToken));
+
+        // JSON 형식으로 응답을 구성
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "로그인 되었습니다");
+        response.put("access_token", accessToken);
+        response.put("refresh_token", refreshToken);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(response);
+
+        log.info("JSON Response: {}", jsonResponse);
+        return response;
     }
 
     @PostMapping("/refresh")
-    private ResponseEntity<?> refresh(@RequestHeader("RefreshToken") String refreshToken, HttpServletResponse httpServletResponse) throws IllegalAccessException {
+    private ResponseEntity<?> refresh(@RequestHeader("refresh_token") String refreshToken, HttpServletResponse httpServletResponse) throws IllegalAccessException {
         String key = tokenProvider.getEmailBytoken(refreshToken);
 //        Role role = tokenProvider.getRoleByToken(refreshToken);
 
         String accessTokenByRefresh = customerService.createAccessTokenByRefresh(key);
-        httpServletResponse.setHeader("AccessToken", accessTokenByRefresh);
+        httpServletResponse.setHeader("access_token", accessTokenByRefresh);
         redisTemplate.opsForValue().set(key, accessTokenByRefresh, Duration.ofSeconds(1800));
         return ResponseEntity.status(HttpStatus.OK.value()).body("토큰이 재발급 되었습니다");
     }
