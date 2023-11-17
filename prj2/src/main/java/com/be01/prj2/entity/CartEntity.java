@@ -14,6 +14,7 @@ import java.util.List;
 public class CartEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "cart_id")
     private Long cartId;
 
     @Column(name = "user_idx", nullable = false)
@@ -25,7 +26,7 @@ public class CartEntity {
     @Column(name = "cart_quantity", nullable = false) //상품 수량
     private int cartQuantity;
 
-    @Column(name = "cart_status", nullable = false)  //결제여부
+    @Column(name = "cart_status", nullable = false)  //결제 여부
     private String cartStatus;
 
     @Column(name = "total_price", nullable = false)

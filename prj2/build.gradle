@@ -55,6 +55,7 @@ dependencies {
 
     //redis 환경 구성
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 }
 
 tasks.named('bootBuildImage') {
