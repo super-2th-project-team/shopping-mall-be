@@ -46,7 +46,7 @@ public class SellDto {
 //
 //    }
 
-    // fromEntity 메서드는 그대로 유지
+
     public static SellDto fromEntity(Product product, List<String> color, List<String> size, Long userId){
         return SellDto.builder()
                 .userId(userId)
