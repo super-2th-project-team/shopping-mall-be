@@ -30,6 +30,7 @@ public class Customer implements UserDetails {
     private String password;
     private String mobile;
     private char gender;
+    @Column(name = "address", nullable = true)
     private String address;
     private String profileImg;
     private Role role;
