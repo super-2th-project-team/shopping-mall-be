@@ -1,6 +1,6 @@
 package com.be01.prj2.repository.customUserDetails;
 
-import com.be01.prj2.entity.Customer;
+import com.be01.prj2.entity.customer.Customer;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

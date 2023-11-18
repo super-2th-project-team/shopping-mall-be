@@ -1,4 +1,4 @@
-package com.be01.prj2.entity;
+package com.be01.prj2.entity.customer;
 
 import com.be01.prj2.entity.product.OrderProduct;
 import com.be01.prj2.entity.product.Product;
@@ -39,7 +39,7 @@ public class Customer implements UserDetails {
     @OneToMany(mappedBy = "userId")
     private List<Product> products;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customerId")
     private List<OrderProduct> orderProducts;
 
 

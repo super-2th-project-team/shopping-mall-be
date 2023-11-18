@@ -1,6 +1,9 @@
 package com.be01.prj2.repository;
 
+import com.be01.prj2.dto.productsDto.SellDto;
+import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.product.Product;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.ArrayList;
@@ -11,4 +14,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     ArrayList<?> findByProductId(Long productId);
 
 
+    Long findUserIdByProductId(Long productId);
+
+    List<Product> findProductByUserId(Customer userId);
 }

@@ -1,6 +1,6 @@
 package com.be01.prj2.entity.product;
 
-import com.be01.prj2.entity.Customer;
+import com.be01.prj2.entity.customer.Customer;
 import lombok.*;
 
 import javax.persistence.*;
@@ -44,12 +44,11 @@ public class Product {
     private List<String> size;
 
     @ManyToOne
-    @JoinColumn(name = "user_idx")
+    @JoinColumn(name = "user_idx") //실제 컬럼명
     private Customer userId;
 
-    @OneToMany(mappedBy = "product") // mappedBy 속성은 Product 엔터티에 있는 필드명을 나타냅니다.
+    @OneToMany(mappedBy = "productId") // mappedBy 속성은 Product 엔터티에 있는 필드명을 나타냅니다.
     private List<OrderProduct> orderProducts;
-
 
 
 

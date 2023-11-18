@@ -4,12 +4,10 @@ import com.be01.prj2.dto.AddExtraInfoDto;
 import com.be01.prj2.dto.LoginDto;
 
 import com.be01.prj2.dto.SignupDto;
-import com.be01.prj2.entity.Customer;
+import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.CustomerRepository;
-import com.be01.prj2.service.CustomerService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -43,8 +41,6 @@ public class CustomerController {
     public Map<String ,String > login(@RequestBody LoginDto loginDto, HttpServletResponse httpServletResponse) {
         String accessToken = customerService.login(loginDto);
         String refreshToken = tokenProvider.createRefreshToken(loginDto.getEmail());
-
-
 
         redisTemplate.opsForValue().set(loginDto.getEmail(), accessToken, Duration.ofSeconds(1800));
         redisTemplate.opsForValue().set("RF :" + loginDto.getEmail(), refreshToken, Duration.ofHours(1L));
