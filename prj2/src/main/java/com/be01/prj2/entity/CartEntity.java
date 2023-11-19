@@ -1,5 +1,6 @@
 package com.be01.prj2.entity;
 
+import com.be01.prj2.entity_Customer.Customer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -40,4 +41,10 @@ public class CartEntity {
         this.cartStatus = cartStatus;
         this.totalPrice = totalPrice;
     }
+    @ManyToOne
+    @JoinColumn(name = "user_idx", insertable = false, updatable = false)
+    private Customer customer;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private List<CartProductEntity> cartProducts;
 }

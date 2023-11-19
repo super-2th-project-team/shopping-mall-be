@@ -1,5 +1,9 @@
 package com.be01.prj2.entity_Customer;
 
+import com.be01.prj2.entity.CartEntity;
+import com.be01.prj2.entity.CartProductEntity;
+import com.be01.prj2.entity.OrdersEntity;
+import com.be01.prj2.entity.ProductEntity;
 import com.be01.prj2.role_Customer.Role;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -66,6 +70,20 @@ public class Customer implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<CartEntity> carts;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<CartProductEntity> cartProducts;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<OrdersEntity> orders;
+
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    private List<ProductEntity> products;
+
+
 
 
 }

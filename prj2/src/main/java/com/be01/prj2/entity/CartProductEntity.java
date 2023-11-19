@@ -1,5 +1,6 @@
 package com.be01.prj2.entity;
 
+import com.be01.prj2.entity_Customer.Customer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +13,6 @@ import javax.persistence.*;
 public class CartProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartId;
 
     @Column(name = "user_idx", nullable = false)
     private Long userIdx;
@@ -25,4 +25,13 @@ public class CartProductEntity {
 
     @Column(name = "product_id", nullable = false)
     private Long productId;
+
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    private CartEntity cart;
+
+    @ManyToOne
+    @JoinColumn(name = "user_idx", insertable = false, updatable = false)
+    private Customer customer;
+
 }

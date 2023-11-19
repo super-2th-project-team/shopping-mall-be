@@ -31,7 +31,6 @@ public class OrderService {
         order.setMobile(orderRequest.getMobile());
         order.setOrderComment(orderRequest.getOrderComment());
         order.setAddressee(orderRequest.getAddressee());
-        order.setOrderQuantity(orderRequest.getOrderQuantity());
         order.setOrderEnroll(new Timestamp(System.currentTimeMillis()));
 
         // 주문 저장

@@ -1,11 +1,13 @@
 package com.be01.prj2.entity;
 
+import com.be01.prj2.entity_Customer.Customer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Setter
 @Data
@@ -38,4 +40,11 @@ public class ProductEntity {
     @Column(name = "product_img", nullable = false)
     private String productImg;
 
+
+    @ManyToOne
+    @JoinColumn(name = "seller_idx")
+    private Customer seller;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<OrderProductEntity> orderProducts;
 }
