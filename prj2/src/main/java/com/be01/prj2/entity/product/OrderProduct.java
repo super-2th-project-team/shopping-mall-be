@@ -1,6 +1,6 @@
 package com.be01.prj2.entity.product;
 
-import com.be01.prj2.entity.Customer;
+import com.be01.prj2.entity.customer.Customer;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,10 +23,10 @@ public class OrderProduct {
 
 
     @ManyToOne
-    @JoinColumn(name = "productId")
-    private Product product;
+    @JoinColumn(name = "product_id") //실제 컬럼명
+    private Product productId; //변수 명은 테이블 명으로
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private Customer customer;
+    @JoinColumn(name = "user_idx") //실제 컬럼명
+    private Customer customerId; //변수 명은 테이블 명으로
 }

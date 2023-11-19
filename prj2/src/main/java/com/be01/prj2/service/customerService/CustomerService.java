@@ -1,9 +1,9 @@
-package com.be01.prj2.service;
+package com.be01.prj2.service.customerService;
 
 import com.be01.prj2.dto.AddExtraInfoDto;
 import com.be01.prj2.dto.LoginDto;
 import com.be01.prj2.dto.SignupDto;
-import com.be01.prj2.entity.Customer;
+import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.exception.NotFoundException;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.CustomerRepository;

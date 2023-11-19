@@ -1,7 +1,7 @@
 package com.be01.prj2.dto;
 
 import com.be01.prj2.role.Role;
-import com.be01.prj2.entity.Customer;
+import com.be01.prj2.entity.customer.Customer;
 import lombok.*;
 
 @Getter

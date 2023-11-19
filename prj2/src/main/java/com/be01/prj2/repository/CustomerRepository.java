@@ -1,6 +1,6 @@
 package com.be01.prj2.repository;
 
-import com.be01.prj2.entity.Customer;
+import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.role.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
