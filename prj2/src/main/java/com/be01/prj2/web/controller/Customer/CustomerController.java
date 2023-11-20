@@ -70,7 +70,7 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK.value()).body("토큰이 재발급 되었습니다");
     }
     @PostMapping("/logout")
-    public ResponseEntity<?>  logout(@RequestHeader("AccessToken")String accessToken){
+    public ResponseEntity<?>  logout(@RequestHeader("access_token")String accessToken){
         customerService.logout(accessToken);
         return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
     }
@@ -83,7 +83,7 @@ public class CustomerController {
     }
 
     @PostMapping("/addInfo")
-    private ResponseEntity<?> addInfo(@RequestHeader("AccessToken")String token ,@RequestBody AddExtraInfoDto addExtraInfoDto){
+    private ResponseEntity<?> addInfo(@RequestHeader("access_token")String token ,@RequestBody AddExtraInfoDto addExtraInfoDto){
         customerService.addExtraInfo(token, addExtraInfoDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("저장 되었습니다!");
     }
