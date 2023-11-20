@@ -1,6 +1,7 @@
 package com.be01.prj2.entity.customer;
 
 import com.be01.prj2.entity.cart.Cart;
+import com.be01.prj2.entity.mypage.Mypage;
 import com.be01.prj2.entity.order.Order;
 import com.be01.prj2.entity.order.OrderProduct;
 import com.be01.prj2.entity.product.Product;
@@ -48,6 +49,8 @@ public class Customer implements UserDetails {
     @OneToMany(mappedBy = "orderUserId")
     private List<Order> order;
 
+    @OneToOne(mappedBy = "myPageUserId")
+    private Mypage mypage;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
