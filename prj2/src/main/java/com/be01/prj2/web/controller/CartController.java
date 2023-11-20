@@ -26,12 +26,33 @@ public class CartController {
         CartEntity addedCartItem = cartService.addToCart(cartItem);
         return new ResponseEntity<>(addedCartItem, HttpStatus.CREATED);
     }
-    // 장바구니 항목 수정
-    @PutMapping("/update/{cartId}")
-    public ResponseEntity<CartEntity> updateCartItem(@PathVariable Long cartId, @RequestBody CartEntity updatedCartItem) {
-        CartEntity updatedItem = cartService.updateCartItem(cartId, updatedCartItem);
-        return new ResponseEntity<>(updatedItem, HttpStatus.OK);
+     //장바구니 항목 수정
+//    @PutMapping("/update/{cartId}")
+//    public ResponseEntity<CartEntity> updateCartItem(@PathVariable Long cartId, @RequestBody CartEntity updatedCartItem) {
+//        CartEntity updatedItem = cartService.updateCartItem(cartId, updatedCartItem);
+//        return new ResponseEntity<>(updatedItem, HttpStatus.OK);
+//    }
+
+    @DeleteMapping("/remove/{cartId}")
+    public ResponseEntity<String> removeCartItem(@PathVariable Long cartId) {
+        try {
+            cartService.removeCartItem(cartId);
+            return new ResponseEntity<>("장바구니 항목이 성공적으로 삭제되었습니다.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("장바구니 항목을 삭제하는 데 실패했습니다: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
+
+    @PutMapping("/remove-and-update/{cartId}")
+    public ResponseEntity<CartEntity> removeAndRefreshCartItem(@PathVariable Long cartId, @RequestBody CartEntity updatedCartItem) {
+        try {
+            CartEntity updatedCart = cartService.updateAndRefreshCartItem(cartId, updatedCartItem);
+            return new ResponseEntity<>(updatedCart, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     //장바구니 주문
     @PostMapping("/order")
@@ -40,4 +61,3 @@ public class CartController {
         return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
 }
-

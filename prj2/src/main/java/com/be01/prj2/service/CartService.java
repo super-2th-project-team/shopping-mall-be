@@ -34,7 +34,7 @@ public class CartService {
     public CartEntity addToCart(CartEntity cartItem) {
         Optional<CartEntity> existingCartItem = Optional.ofNullable(cartRepository
                 .findByUserIdxAndProductIdAndCartStatus(cartItem.getUserIdx(),
-                        cartItem.getProductId(), "CART"));
+                        cartItem.getProductId(), "신규 장바구니 추가"));
 
         if (existingCartItem.isPresent()) {
             // 기존에 있는 경우 수량 증가 및 총 가격 업데이트
@@ -43,21 +43,43 @@ public class CartService {
             cartEntity.setTotalPrice(cartEntity.getTotalPrice() + cartItem.getTotalPrice());
         } else {
             // 기존에 없는 경우 신규 추가
-            cartItem.setCartStatus("CART");
+            cartItem.setCartStatus("신규 장바구니 추가");
         }
         return cartRepository.save(cartItem);
     }
 
-    //장바구니 물품 내역 수정
-    public CartEntity updateCartItem(Long cartId, CartEntity updatedCartItem) {
+
+    // 장바구니 물품 삭제
+    public void removeCartItem(Long cartId) {
+        CartEntity cartItem = cartRepository.findById(cartId)
+                .orElseThrow(() -> new RuntimeException("장바구니 항목을 찾을 수 없습니다."));
+
+        cartRepository.delete(cartItem);
+    }
+
+    // 장바구니 물품 수정 및 업데이트
+    public CartEntity updateAndRefreshCartItem(Long cartId, CartEntity updatedCartItem) {
         CartEntity existingCartItem = cartRepository.findById(cartId)
                 .orElseThrow(() -> new RuntimeException("장바구니 항목을 찾을 수 없습니다."));
 
         // 수량을 업데이트
         existingCartItem.setCartQuantity(updatedCartItem.getCartQuantity());
 
+        // 업데이트된 장바구니 항목을 저장하고 반환
         return cartRepository.save(existingCartItem);
     }
+
+
+//    //장바구니 물품 내역 수정
+//    public CartEntity updateCartItem(Long cartId, CartEntity updatedCartItem) {
+//        CartEntity existingCartItem = cartRepository.findById(cartId)
+//                .orElseThrow(() -> new RuntimeException("장바구니 항목을 찾을 수 없습니다."));
+//
+//        // 수량을 업데이트
+//        existingCartItem.setCartQuantity(updatedCartItem.getCartQuantity());
+//
+//        return cartRepository.save(existingCartItem);
+//    }
 
     //장바구니 주문
     public OrdersEntity placeOrder(OrderRequest orderRequest) {
@@ -74,4 +96,5 @@ public class CartService {
 
         return order;
     }
+
 }
