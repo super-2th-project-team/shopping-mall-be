@@ -1,12 +1,12 @@
 spring:
   datasource:
     username: root
-    password: 1231
-    url: jdbc:mysql://localhost:3306/pr2testdb2?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    password: zkvpfkxp12
+    url: jdbc:mysql://database-1.cahlafz8ipck.ap-northeast-2.rds.amazonaws.com/prj2
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: localhost
-    port: 8060
+    port: 6379
 
   jpa:
     show-sql: true

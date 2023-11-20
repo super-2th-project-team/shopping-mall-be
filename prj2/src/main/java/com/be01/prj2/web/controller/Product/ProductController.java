@@ -71,21 +71,4 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body("물품 삭제가 완료 되었습니다");
     }
 
-    //토큰을 받아서 상품 삭제
-//    @PostMapping("/{productId2}")
-//    public ResponseEntity<?> deleteByProductId2(@RequestBody SellDto sellDto,
-//                                             @RequestHeader("access_token")String token){
-//
-//        String email = tokenProvider.getEmailBytoken(token);
-//        Optional<Customer> seller = customerRepository.findByEmail(email);
-//        if(seller.isPresent()){
-//            Customer customer = seller.get();
-//            Long userId = customer.getUserId();
-//            productService.productRegister(sellDto, userId);
-//        }else{
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당하는 user가 없습니다");
-//        }
-//        return ResponseEntity.status(HttpStatus.CREATED).body("물품 등록이 완료 되었습니다");
-//    }
-
 }

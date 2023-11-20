@@ -13,6 +13,8 @@ import com.be01.prj2.service.SellService.SellService;
 import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,6 +61,20 @@ public class SellController {
                     return sellService.findUserProduct(token, userId);
                 })
                 .orElse(Collections.emptyList());
+    }
+
+    //토큰을 받아 상품 재고 수정
+    @PostMapping("/stockModify/{productId}")
+    public ResponseEntity<String> updateStock(@RequestHeader("access_token") String token,
+                                              @PathVariable Long productId,
+                                              @RequestBody Map<String, Integer> requestBody) {
+        Integer productStock = requestBody.get("productStock");
+        try {
+            sellService.stockModify(token, productId, productStock);
+            return ResponseEntity.status(HttpStatus.CREATED).body("물품 재고가 업데이트되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당하는 물품이 없습니다.");
+        }
     }
 
 
