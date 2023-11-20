@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product,Long> {
 
-    ArrayList<?> findByProductId(Long productId);
+    Product findByProductId(Long productId);
 
 
     Long findUserIdByProductId(Long productId);
