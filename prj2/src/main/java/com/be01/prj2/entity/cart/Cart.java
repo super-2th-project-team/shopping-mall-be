@@ -21,7 +21,7 @@ public class Cart {
     private Long cartId;
 
     @OneToOne
-    @JoinColumn(name = "user_idx")
+    @JoinColumn(name = "buyer_idx")
     private Customer buyerId;
 
     private Long cartQuantity;
