@@ -12,6 +12,8 @@ import com.be01.prj2.service.ProductService.ProductService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,8 +53,11 @@ public class ProductController {
 
     //모든 상품 정보 조회
     @GetMapping("/getAll")
-    public List<SellDto> getAll(){
-        List<Product> productEntity = productService.findAll();
+    public List<SellDto> getAll(Pageable pageable){
+
+
+        Page<Product> productPage = productService.findAll(pageable);
+        List<Product> productEntity = productPage.getContent();
 
         return productEntity.stream()
                 .map(product -> {

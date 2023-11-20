@@ -13,6 +13,9 @@ import com.be01.prj2.repository.SizeRepository;
 import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,7 +63,10 @@ public class ProductService {
     }
 
     //DB에 있는 모든 물품 조회
-    public List<Product> findAll(){return productRepository.findAll();}
+    public Page<Product> findAll(Pageable pageable){
+
+        return productRepository.findAll(pageable);
+    }
 
     @Transactional
     public Map<String, List<String>> getProductDetails(Long productId) {

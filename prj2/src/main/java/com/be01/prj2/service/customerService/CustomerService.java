@@ -88,18 +88,24 @@ public class CustomerService {
             customerRepository.findByEmail(email)
                     .orElseThrow(() -> new NotFoundException("회원이 없습니다"));
 
-            Optional<Customer> isSignout = customerRepository.findByEmail(email);
-
-            if(isSignout.isPresent()){
-                Customer signOut = isSignout.get();
-                if(signOut.getRole().equals(Role.SIGNOUT)){
-                    return "회원이 없습니다";
-                }
-            }
-
             if (redisTemplate.opsForValue().get("logout : " + loginDto.getEmail()) != null) {
                 redisTemplate.delete("logout: " + loginDto.getEmail());
             }
+
+            try {
+                Optional<Customer> isSignout = customerRepository.findByEmail(email);
+                if(isSignout.isPresent()){
+                    Customer signOut = isSignout.get();
+                    if(signOut.getRole().equals(Role.SIGNOUT)){
+                        return "회원이 없습니다";
+                    }
+                }else{
+                    return "회원이 없습니다";
+                }
+            }catch (Exception e){
+                throw new NotFoundException("회원이 없습니다");
+            }
+
             return tokenProvider.createAccessToken(email);
 
         } catch (Exception e) {
