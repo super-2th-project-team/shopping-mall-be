@@ -1,6 +1,8 @@
 package com.be01.prj2.entity.customer;
 
-import com.be01.prj2.entity.product.OrderProduct;
+import com.be01.prj2.entity.cart.Cart;
+import com.be01.prj2.entity.order.Order;
+import com.be01.prj2.entity.order.OrderProduct;
 import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.role.Role;
 import lombok.*;
@@ -36,11 +38,15 @@ public class Customer implements UserDetails {
     private String profileImg;
     private Role role;
 
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "sellerId")
     private List<Product> products;
 
-    @OneToMany(mappedBy = "customerId")
-    private List<OrderProduct> orderProducts;
+
+    @OneToOne(mappedBy = "buyerId")
+    private Cart cart;
+
+    @OneToMany(mappedBy = "orderUserId")
+    private List<Order> order;
 
 
     @Override

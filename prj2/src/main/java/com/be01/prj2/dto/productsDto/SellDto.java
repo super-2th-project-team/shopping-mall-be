@@ -16,7 +16,7 @@ import java.util.List;
 public class SellDto {
 
 
-    private Long userId;
+    private Long sellerId;
     private Long productId;
     private String productName;
     private Integer productPrice;
@@ -49,7 +49,7 @@ public class SellDto {
 
     public static SellDto fromEntity(Product product, List<String> color, List<String> size, Long userId){
         return SellDto.builder()
-                .userId(userId)
+                .sellerId(userId)
                 .productId(product.getProductId())
                 .productName(product.getProductName())
                 .productPrice(product.getProductPrice())

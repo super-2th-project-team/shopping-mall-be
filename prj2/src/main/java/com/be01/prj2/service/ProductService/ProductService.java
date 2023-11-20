@@ -54,7 +54,7 @@ public class ProductService {
                     .subCategory(sellDto.getSubCategory())
                     .color(color.subList(0, 4))
                     .size(size.subList(0, 5))
-                    .userId(customer)
+                    .sellerId(customer)
                     .build();
             return productRepository.save(product);
         } else {
@@ -84,8 +84,8 @@ public class ProductService {
     //productId로 userId를 가지고 오는 로직
     public Long findUserIdByProductId(Long productId) {
         Product product = productRepository.findById(productId).orElse(null);
-        if (product != null && product.getUserId() != null) {
-            return product.getUserId().getUserId();
+        if (product != null && product.getSellerId() != null) {
+            return product.getSellerId().getUserId();
         } else {
             return null;
         }

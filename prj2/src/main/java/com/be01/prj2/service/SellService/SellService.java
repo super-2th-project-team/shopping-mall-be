@@ -53,7 +53,7 @@ public class SellService {
 
         if(seller.isPresent()){
             Customer customer = seller.get();
-            List<Product> userProducts = productRepository.findProductByUserId(customer);
+            List<Product> userProducts = productRepository.findProductBySellerId(customer);
             return   userProducts.stream()
                     .map(product -> {
                         List<String> colorList = getProductColor(product.getProductId());
