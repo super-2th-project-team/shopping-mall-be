@@ -12,8 +12,8 @@ public class CartProductDto {
 
     private Long cartId;
     private Long buyerId;
-    private Long Quantity;
-    private Long price;
+    private int Quantity;
+    private int price;
     private Long productId;
     private Long sellerId;
 

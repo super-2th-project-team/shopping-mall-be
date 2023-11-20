@@ -25,7 +25,7 @@ public class Product {
     @Column(name = "product_name")
     private String productName;
 
-    private Long productPrice;
+    private int productPrice;
     private String productInfo;
     private Integer productStock;
     private Integer productSell;

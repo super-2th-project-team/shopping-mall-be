@@ -19,7 +19,7 @@ public class SellDto {
     private Long sellerId;
     private Long productId;
     private String productName;
-    private Long productPrice;
+    private int productPrice;
     private String productInfo;
     private Integer productStock;
     private Integer productSell;
