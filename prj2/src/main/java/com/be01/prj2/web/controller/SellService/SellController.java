@@ -1,13 +1,9 @@
 package com.be01.prj2.web.controller.SellService;
 
 import com.be01.prj2.dto.productsDto.SellDto;
-import com.be01.prj2.entity.customer.Customer;
-import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.jwt.TokenProvider;
-import com.be01.prj2.repository.ColorRepository;
-import com.be01.prj2.repository.CustomerRepository;
-import com.be01.prj2.repository.ProductRepository;
-import com.be01.prj2.repository.SizeRepository;
+import com.be01.prj2.repository.customerRepository.CustomerRepository;
+import com.be01.prj2.repository.productRepository.ProductRepository;
 import com.be01.prj2.service.ProductService.ProductService;
 import com.be01.prj2.service.SellService.SellService;
 import com.be01.prj2.service.customerService.CustomerService;
@@ -17,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

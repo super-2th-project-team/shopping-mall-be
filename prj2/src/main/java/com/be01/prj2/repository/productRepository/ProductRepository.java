@@ -1,4 +1,4 @@
-package com.be01.prj2.repository;
+package com.be01.prj2.repository.productRepository;
 
 import com.be01.prj2.dto.productsDto.SellDto;
 import com.be01.prj2.entity.customer.Customer;

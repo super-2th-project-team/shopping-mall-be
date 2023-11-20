@@ -1,4 +1,4 @@
-package com.be01.prj2.repository;
+package com.be01.prj2.repository.productRepository;
 
 import com.be01.prj2.entity.product.ProductSize;
 import org.springframework.data.jpa.repository.JpaRepository;

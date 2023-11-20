@@ -6,15 +6,14 @@ import com.be01.prj2.entity.product.Product;
 
 import com.be01.prj2.jwt.TokenProvider;
 
-import com.be01.prj2.repository.ColorRepository;
-import com.be01.prj2.repository.CustomerRepository;
-import com.be01.prj2.repository.ProductRepository;
-import com.be01.prj2.repository.SizeRepository;
+import com.be01.prj2.repository.productRepository.ColorRepository;
+import com.be01.prj2.repository.customerRepository.CustomerRepository;
+import com.be01.prj2.repository.productRepository.ProductRepository;
+import com.be01.prj2.repository.productRepository.SizeRepository;
 import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

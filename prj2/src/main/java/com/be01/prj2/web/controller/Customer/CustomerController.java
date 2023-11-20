@@ -1,12 +1,12 @@
 package com.be01.prj2.web.controller.Customer;
 
-import com.be01.prj2.dto.AddExtraInfoDto;
-import com.be01.prj2.dto.LoginDto;
+import com.be01.prj2.dto.customerDto.AddExtraInfoDto;
+import com.be01.prj2.dto.customerDto.LoginDto;
 
-import com.be01.prj2.dto.SignupDto;
+import com.be01.prj2.dto.customerDto.SignupDto;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.jwt.TokenProvider;
-import com.be01.prj2.repository.CustomerRepository;
+import com.be01.prj2.repository.customerRepository.CustomerRepository;
 import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
