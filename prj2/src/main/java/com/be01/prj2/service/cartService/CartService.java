@@ -4,6 +4,7 @@ import com.be01.prj2.dto.cartDto.CartDto;
 import com.be01.prj2.dto.cartDto.CartProductDto;
 import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.entity.cart.CartProduct;
+import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.repository.cartRepository.CartProductRepository;
 import com.be01.prj2.repository.cartRepository.CartRepository;
@@ -15,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,52 +32,67 @@ public class CartService {
     private final ProductRepository productRepository;
 
 
-
-
-    //장바구니 생성
-    public Cart createCart(Long buyerId){
-        Cart cart = cartRepository.findByBuyerId(buyerId);
-
-        if(cartRepository.findByBuyerId(cart.getBuyerId().getUserId()) != null){
-            return null;
-        }else{
-                Cart.builder()
-                    .totalPrice(0L)
-                    .cartQuantity(0L)
-                    .status(CartStatus.NOTPAY)
-                    .build();
-            return  cartRepository.save(cart);
-        }
-    }
-
-    public CartProductDto addItem(CartProductDto cartProductDto, Long buyerId) {
-        Cart cart = cartRepository.findByBuyerId(buyerId);
+    //cart 추가 및 아이템 추가
+    public void addItem(Customer customer, Product product, int quantity, String color, String size) {
+        Cart cart = cartRepository.findByUserIdx(customer);
 
         if (cart == null) {
-            // Cart가 없다면 새로 생성
-            cart = createCart(buyerId);
+           cart = Cart.createCart(customer);
+        }
+        //cartItem 생성
+
+        CartProduct cartProduct = cartProductRepository.findByCartIdAndProductId(cart, product);
+
+        //cart_item 이 비어있으면 새로 생성
+        if(cartProduct ==null){
+            cartProduct = CartProduct.createCartProduct(cart, product, quantity, color, size);
+            cartProductRepository.save(cartProduct);
+
+    }else{
+            cartProduct.addCount(quantity);
         }
 
-        Product product = productRepository.findByProductId(cartProductDto.getProductId());
-
-        CartProduct cartProduct = CartProduct.builder()
-                .cartId(cart.getCartId())
-                .cartQuantity(cartProductDto.getQuantity())
-                .price(product.getProductPrice())
-                .productId(product)
-                .sellerId(product)
-                .build();
-        // CartProduct를 저장
-        cartProductRepository.save(cartProduct);
-
-        // 변경된 Cart 정보를 업데이트
-        cart.setCartQuantity(cart.getCartQuantity() + cartProductDto.getQuantity());
-        cart.setTotalPrice(cart.getTotalPrice() + (cartProductDto.getQuantity() * product.getProductPrice()));
+        updateCartTotal(cart);
         cartRepository.save(cart);
 
-        // 필요에 따라 DTO로 변환하여 반환
-        return cartProductDto;
     }
+    //cart에 있는 수량, 가격 총계처리
+    private void updateCartTotal(Cart cart) {
+        if (cart != null) {
+            int totalQuantity = 0;
+            int totalPrice = 0;
+
+            for (CartProduct cartProduct : cart.getCartProducts()) {
+                int productQuantity = cartProduct.getCartQuantity();
+                totalQuantity += productQuantity;
+                totalPrice += productQuantity * cartProduct.getPrice();
+            }
+
+            cart.setCartQuantity(totalQuantity);
+            cart.setTotalPrice(totalPrice);
+        }
+    }
+
+    //cart Item 조회
+    public List<CartProductDto> getCartProductsByCartId(Cart cart) {
+        List<CartProduct> cartProducts = cartProductRepository.findByCartId(cart);
+
+        return cartProducts.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+    //DTO 로 변환
+    private CartProductDto convertToDto(CartProduct cartProduct) {
+        return CartProductDto.builder()
+                .cartId(cartProduct.getCartId().getCartId())
+                .productId(cartProduct.getProductId().getProductId())
+                .Quantity(cartProduct.getCartQuantity())
+                .price(cartProduct.getPrice())
+                .color(cartProduct.getColor())
+                .size(cartProduct.getSize())
+                .build();
+    }
+
 
 
 }

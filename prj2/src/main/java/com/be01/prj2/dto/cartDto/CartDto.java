@@ -13,8 +13,8 @@ public class CartDto {
 
     private Long cartId;
     private Long buyerId;
-    private Long totalQuantity;
+    private int totalQuantity;
     private CartStatus status;
-    private Long totalPrice;
+    private int totalPrice;
 
 }

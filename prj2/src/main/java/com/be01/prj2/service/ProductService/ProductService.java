@@ -17,7 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestHeader;
 
+import javax.persistence.EntityNotFoundException;
+import java.nio.file.AccessDeniedException;
 import java.util.*;
 
 @Service
@@ -87,6 +90,33 @@ public class ProductService {
             return product.getSellerId().getUserId();
         } else {
             return null;
+        }
+    }
+
+    //판매자가 팔고 있는 물품 재고 수정
+    @Transactional
+    public Product stockModify(@RequestHeader("access_token")String token, Long productId, Integer productStock) throws AccessDeniedException {
+        String email = tokenProvider.getEmailBytoken(token);
+        Optional<Customer> seller = customerRepository.findByEmail(email);
+
+        if (seller.isPresent()) {
+            Customer customer = seller.get();
+            Optional<Product> optionalProduct = productRepository.findById(productId);
+
+            if (optionalProduct.isPresent()) {
+                Product product = optionalProduct.get();
+
+                if (product.getSellerId().equals(customer)) {
+                    product.setProductStock(productStock);
+                    return productRepository.save(product);
+                } else {
+                    throw new AccessDeniedException("해당 상품의 판매자가 아닙니다.");
+                }
+            } else {
+                throw new EntityNotFoundException("상품을 찾을 수 없습니다.");
+            }
+        } else {
+            throw new EntityNotFoundException("판매자를 찾을 수 없습니다.");
         }
     }
 

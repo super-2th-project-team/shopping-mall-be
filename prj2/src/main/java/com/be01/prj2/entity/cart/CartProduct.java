@@ -1,5 +1,6 @@
 package com.be01.prj2.entity.cart;
 
+
 import com.be01.prj2.entity.product.Product;
 import lombok.*;
 
@@ -15,13 +16,15 @@ import javax.persistence.*;
 public class CartProduct {
 
     @Id
-    @Column(name = "cart_id")
-    private Long cartId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_product_idx")
+    private Long cartProductIdx;
 
-    @ManyToOne
-    @JoinColumn(name = "buyer_idx")
-    private Cart cartCustomerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
+    private Cart cartId;
 
+    private String productName;
     private int cartQuantity;
     private int price;
 
@@ -29,10 +32,23 @@ public class CartProduct {
     @JoinColumn(name = "product_id")
     private Product productId;
 
-    @ManyToOne
-    @JoinColumn(name="seller_idx")
-    private Product sellerId;
+    private String color;
+    private String size;
 
-
+    public static CartProduct createCartProduct(Cart cart, Product product, int cartQuantity ,String color ,
+                                                String size){
+        CartProduct cartProduct = new CartProduct();
+        cartProduct.setCartId(cart);
+        cartProduct.setProductId(product);
+        cartProduct.setProductName(product.getProductName());
+        cartProduct.setPrice(product.getProductPrice());
+        cartProduct.setCartQuantity(cartQuantity);
+        cartProduct.setColor(color);
+        cartProduct.setSize(size);
+        return cartProduct;
+    }
+    public void addCount(int cartQuantity){
+        this.cartQuantity += cartQuantity;
+    }
 
 }
