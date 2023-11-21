@@ -3,6 +3,8 @@ package com.be01.prj2.entity.cart;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.order.Order;
 import com.be01.prj2.role.CartStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,18 +24,32 @@ public class Cart {
     private Long cartId;
 
     @OneToOne
-    @JoinColumn(name = "buyer_idx")
-    private Customer buyerId;
+    @JoinColumn(name = "user_idx")
+    @JsonManagedReference
+    private Customer userIdx;
 
-    private Long cartQuantity;
-    private CartStatus status;
-    private Long totalPrice;
+    @Column(name = "cart_quantity")
+    private int cartQuantity;
 
-    @OneToMany(mappedBy = "cartCustomerId")
-    private List<CartProduct> cartProduct;
+    @Column(name = "status")
+    private String  status;
+
+    @Column(name = "total_price")
+    private int totalPrice;
+
+    @OneToMany(mappedBy = "cartId",cascade = CascadeType.ALL ,orphanRemoval = true)
+    @JsonIgnore
+    private List<CartProduct> cartProducts;
 
     @OneToOne(mappedBy = "cartId")
     private Order orderCartId;
+
+    public static Cart createCart(Customer customer){
+        Cart cart = new Cart();
+        cart.setUserIdx(customer);
+        cart.setStatus(CartStatus.NOTPAY.getName());
+        return cart;
+    }
 
 
 }

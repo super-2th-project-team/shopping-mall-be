@@ -55,8 +55,6 @@ public class Product {
     @OneToMany(mappedBy = "productId")
     private List<CartProduct> cartProducts; //장바구니에 담길 상품들
 
-    @OneToMany(mappedBy = "sellerId")
-    private List<CartProduct> cartProductsSellerIds;//장바구니에 담길 상품들의 판매자 ID
 
     @OneToMany(mappedBy = "orderProductSellerId")
     private List<OrderProduct> orderProductsId;

@@ -68,6 +68,20 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
+    //토큰을 받아 상품 재고 수정
+    @PostMapping("/stockModify/{productId}")
+    public ResponseEntity<String> updateStock(@RequestHeader("access_token") String token,
+                                              @PathVariable Long productId,
+                                              @RequestBody Map<String, Integer> requestBody) {
+        Integer productStock = requestBody.get("productStock");
+        try {
+            productService.stockModify(token, productId, productStock);
+            return ResponseEntity.status(HttpStatus.CREATED).body("물품 재고가 업데이트되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당하는 물품이 없습니다.");
+        }
+    }
+
 
 
 }
