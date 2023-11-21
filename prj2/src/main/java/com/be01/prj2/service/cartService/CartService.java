@@ -46,10 +46,7 @@ public class CartService {
         CartProduct cartProduct = cartProductRepository.findByCartIdAndProductIdAndColorAndSize(cart,product,color,size);
 
         if(cartProduct==null){
-
-            int price = (product != null) ? product.getProductPrice() : 0;
             cartProduct = CartProduct.createCartProduct(cart, product, quantity, color, size);
-            cartProduct.setPrice(price);
             cartProductRepository.save(cartProduct);
         }else{
             cartProduct.addCount(quantity);
