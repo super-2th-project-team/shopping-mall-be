@@ -6,6 +6,7 @@ import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.entity.cart.CartProduct;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.product.Product;
+import com.be01.prj2.entity.product.ProductColor;
 import com.be01.prj2.repository.cartRepository.CartProductRepository;
 import com.be01.prj2.repository.cartRepository.CartRepository;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
@@ -16,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,17 +42,16 @@ public class CartService {
         if (cart == null) {
            cart = Cart.createCart(customer);
         }
-        //cartItem 생성
 
-        CartProduct cartProduct = cartProductRepository.findByCartIdAndProductId(cart, product);
+        CartProduct cartProduct = cartProductRepository.findByCartIdAndProductIdAndColorAndSize(cart,product,color,size);
 
-        //cart_item 이 비어있으면 새로 생성
-        if(cartProduct ==null){
+        if(cartProduct==null){
             cartProduct = CartProduct.createCartProduct(cart, product, quantity, color, size);
             cartProductRepository.save(cartProduct);
-
-    }else{
+        }else{
             cartProduct.addCount(quantity);
+            cartProductRepository.save(cartProduct);
+
         }
 
         updateCartTotal(cart);

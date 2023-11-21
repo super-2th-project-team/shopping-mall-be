@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.standard.processor.StandardHrefTagProcessor;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +56,7 @@ public class CartController {
                 cart = Cart.createCart(buyer);
                 cartRepository.save(cart);
                 cartService.addItem(buyer, product, cartProductDto.getQuantity(), cartProductDto.getColor(), cartProductDto.getSize());
+
             } else {
                 cartService.addItem(buyer, product, cartProductDto.getQuantity(), cartProductDto.getColor(), cartProductDto.getSize());
             }

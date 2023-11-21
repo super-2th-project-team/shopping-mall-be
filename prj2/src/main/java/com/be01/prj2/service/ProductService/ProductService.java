@@ -41,8 +41,8 @@ public class ProductService {
 
         if (isSeller.isPresent()) {
             Customer customer = isSeller.get();
-            List<String> color = Arrays.asList("red", "blue", "green", "beige");
-            List<String> size = Arrays.asList("s", "m", "L", "XL", "FREE");
+            List<String> color = Arrays.asList("brown", "black", "beige", "white", "ivory", "navy", "gray");
+            List<String> size = Arrays.asList("S", "M", "L", "XL", "FREE");
 
             Product product = Product.builder()
                     .productName(sellDto.getProductName())
