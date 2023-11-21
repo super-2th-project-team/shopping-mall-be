@@ -46,7 +46,10 @@ public class CartService {
         CartProduct cartProduct = cartProductRepository.findByCartIdAndProductIdAndColorAndSize(cart,product,color,size);
 
         if(cartProduct==null){
+
+            int price = (product != null) ? product.getProductPrice() : 0;
             cartProduct = CartProduct.createCartProduct(cart, product, quantity, color, size);
+            cartProduct.setPrice(price);
             cartProductRepository.save(cartProduct);
         }else{
             cartProduct.addCount(quantity);
@@ -54,13 +57,13 @@ public class CartService {
 
         }
 
-        updateCartTotal(cart);
+        updateCartTotal(cart, cartProduct);
         cartRepository.save(cart);
 
     }
     //cart에 있는 수량, 가격 총계처리
-    private void updateCartTotal(Cart cart) {
-        if (cart != null) {
+    private void updateCartTotal(Cart cart, CartProduct initCart) {
+        if (cart != null && cart.getCartProducts() != null) {
             int totalQuantity = 0;
             int totalPrice = 0;
 
@@ -72,6 +75,12 @@ public class CartService {
 
             cart.setCartQuantity(totalQuantity);
             cart.setTotalPrice(totalPrice);
+        }else{
+            int totalQuantity = initCart.getCartQuantity();
+            int totalPrice = initCart.getPrice();
+            cart.setCartQuantity(totalQuantity);
+            cart.setTotalPrice(totalPrice);
+
         }
     }
 
