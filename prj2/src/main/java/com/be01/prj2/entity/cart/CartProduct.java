@@ -22,8 +22,8 @@ public class CartProduct {
     @JoinColumn(name = "buyer_idx")
     private Cart cartCustomerId;
 
-    private Long cartQuantity;
-    private Long price;
+    private int cartQuantity;
+    private int price;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

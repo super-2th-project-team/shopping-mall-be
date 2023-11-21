@@ -2,6 +2,7 @@ package com.be01.prj2.entity.cart;
 
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.order.Order;
+import com.be01.prj2.role.CartStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,11 +22,11 @@ public class Cart {
     private Long cartId;
 
     @OneToOne
-    @JoinColumn(name = "user_idx")
+    @JoinColumn(name = "buyer_idx")
     private Customer buyerId;
 
     private Long cartQuantity;
-    private Long status;
+    private CartStatus status;
     private Long totalPrice;
 
     @OneToMany(mappedBy = "cartCustomerId")

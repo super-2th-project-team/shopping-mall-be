@@ -1,6 +1,6 @@
 package com.be01.prj2.entity.order;
 
-import com.be01.prj2.entity.customer.Customer;
+
 import com.be01.prj2.entity.product.Product;
 import lombok.*;
 
