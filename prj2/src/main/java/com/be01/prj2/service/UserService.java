@@ -14,12 +14,4 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
-    public int getUserBudget(Long userId) {
-        Customer user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-
-        // 예산 반환
-        return user.getBudget();
-    }
 }

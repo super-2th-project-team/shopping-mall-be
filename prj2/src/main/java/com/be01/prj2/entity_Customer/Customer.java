@@ -37,7 +37,6 @@ public class Customer implements UserDetails {
     private String address;
     private String profileImg;
     private Role role;
-    private int budget; // 예산 필드 추가
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -81,20 +81,5 @@ public class CartService {
 //        return cartRepository.save(existingCartItem);
 //    }
 
-    //장바구니 주문
-    public OrdersEntity placeOrder(OrderRequest orderRequest) {
-        // 장바구니에서 주문으로 항목을 이동.
-
-        // 재고 및 예산 확인
-        if (!productService.checkInventoryAndBudget(orderRequest)) {
-            throw new RuntimeException("재고 또는 예산이 부족합니다.");
-        }
-
-        // 주문 생성
-        OrdersEntity order = orderService.createOrder(orderRequest);
-        // 로직 추가 필요
-
-        return order;
-    }
 
 }

@@ -1,8 +1,8 @@
 spring:
   datasource:
     username: root
-    password: 12341234
-    url: jdbc:mysql://localhost:3306/pj1
+    password: zkvpfkxp12
+    url: jdbc:mysql://database-1.cahlafz8ipck.ap-northeast-2.rds.amazonaws.com/prj2
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: localhost
@@ -12,6 +12,12 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        dialect: org.hibernate.dialect.MySQLDialect
+
 security:
   jwt:
     header: Authorization

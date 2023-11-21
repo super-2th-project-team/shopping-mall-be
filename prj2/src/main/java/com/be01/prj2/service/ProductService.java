@@ -51,21 +51,4 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public boolean checkInventoryAndBudget(OrderRequest orderRequest) {
-        Long productId = orderRequest.getProductId();
-        int orderQuantity = orderRequest.getOrderQuantity();
-
-        // 상품의 현재 재고 확인
-        int productStock = getProductStock(productId);
-
-        // 사용자의 예산 확인
-        Long userId = orderRequest.getUserIdx();
-        int userBudget = userService.getUserBudget(userId);
-
-        // 주문하려는 상품의 총 가격 확인
-        int orderTotalPrice = getProductPrice(productId) * orderQuantity;
-
-        // 주문 가능 여부 판단
-        return userBudget >= orderTotalPrice && productStock >= orderQuantity;
-    }
 }

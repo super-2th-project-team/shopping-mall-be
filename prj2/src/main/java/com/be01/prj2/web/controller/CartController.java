@@ -54,10 +54,5 @@ public class CartController {
     }
 
 
-    //장바구니 주문
-    @PostMapping("/order")
-    public ResponseEntity<OrdersEntity> placeOrder(@RequestBody OrderRequest orderRequest) {
-        OrdersEntity order = cartService.placeOrder(orderRequest);
-        return new ResponseEntity<>(order, HttpStatus.CREATED);
-    }
+
 }
