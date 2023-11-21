@@ -41,6 +41,8 @@ dependencies {
 //    testImplementation 'org.springframework.security:spring-security-test'
 
     implementation 'org.springdoc:springdoc-openapi-ui:1.5.12'
+
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
 }
 
 tasks.named('bootBuildImage') {
