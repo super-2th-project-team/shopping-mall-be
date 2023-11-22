@@ -1,20 +1,24 @@
 package com.be01.prj2.service.myPage;
 
-import com.be01.prj2.dto.myPage.CartDto;
+import com.be01.prj2.dto.cartDto.CartDto;
 import com.be01.prj2.dto.myPage.MyPageDto;
 import com.be01.prj2.dto.myPage.PurViewDto;
-import com.be01.prj2.entity.myPage.CartEntity;
+import com.be01.prj2.entity.cart.Cart;
+import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.myPage.MyPageEntity;
 import com.be01.prj2.entity.myPage.PayEntity;
 import com.be01.prj2.entity.myPage.PurViewEntity;
 import com.be01.prj2.exception.myPage.MyPageException;
-import com.be01.prj2.repository.myPage.CartRepository;
+import com.be01.prj2.repository.cartRepository.CartRepository;
+import com.be01.prj2.repository.customerRepository.CustomerRepository;
+import com.be01.prj2.repository.myPage.MyPageRepository;
 import com.be01.prj2.repository.myPage.PayRepository;
 import com.be01.prj2.repository.myPage.PurViewRepository;
-import com.be01.prj2.repository.myPage.MyPageRepository;
+import com.be01.prj2.role.CartStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,20 +31,21 @@ public class MyPageServiceImpl implements MyPageService {
     private final CartRepository cartRepository;
     private final PurViewRepository purViewRepository;
     private final PayRepository payRepository;
+    private final CustomerRepository customerRepository;
 
     @Override
     public MyPageDto getMyPageInfo(String email) {
 
         // email로 유저 정보 조회
-        MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
+        MyPageEntity mypageEntity = myPageRepository.findByEmail(email);
 
-        if (myPageEntity == null) {
+        if (mypageEntity == null) {
             throw new MyPageException("유저 정보를 찾을 수 없습니다. email을 확인해주세요.");
         }
 
         // 변경된 엔티티 정보 반환
-        return new MyPageDto(myPageEntity.getName(), myPageEntity.getEmail(), myPageEntity.getMobile(),
-                myPageEntity.getAddress(), myPageEntity.getGender(), myPageEntity.getProfile(), myPageEntity.getMyInfo());
+        return new MyPageDto(mypageEntity.getName(), mypageEntity.getEmail(), mypageEntity.getMobile(),
+                mypageEntity.getAddress(), mypageEntity.getGender(),  mypageEntity.getMyInfo(), mypageEntity.getProfile(), mypageEntity.getProfileImg());
     }
 
     @Override
@@ -56,31 +61,41 @@ public class MyPageServiceImpl implements MyPageService {
         myPageRepository.save(myPageEntity);
 
         return new MyPageDto(myPageEntity.getName(), myPageEntity.getEmail(), myPageEntity.getMobile(),
-                myPageEntity.getAddress(), myPageEntity.getGender(), myPageEntity.getProfile(), myPageEntity.getMyInfo());
+                myPageEntity.getAddress(), myPageEntity.getGender(), myPageEntity.getMyInfo(), myPageEntity.getProfile(), myPageEntity.getProfileImg());
     }
 
     @Override
     public List<CartDto> getCartProduct(Long id) {
+        // id로 Customer 객체 조회
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new MyPageException("유저 정보를 찾을 수 없습니다. ID를 확인해주세요."));
 
-        // id로 유저 장바구니 물품 리스트 조회
-        List<CartEntity> cartEntityList = cartRepository.findByUserIdx(id);
+        // Customer 객체로 장바구니 물품 조회
+        Cart cartEntity = cartRepository.findByUserIdx(customer);
 
-        if (cartEntityList == null || cartEntityList.isEmpty()) {
+        if (cartEntity == null) {
             throw new MyPageException("장바구니 정보를 찾을 수 없습니다. ID를 확인해주세요.");
         }
 
+        // 조회된 Cart 객체를 List에 담음
+        List<Cart> cartEntityList = new ArrayList<>();
+        cartEntityList.add(cartEntity);
+
         return cartEntityList.stream()
-                .map(entity -> new CartDto(entity.getProductId(), entity.getCartQuantity(), entity.getCartStatus(), entity.getTotalPrice()))
+                .map(entity -> new CartDto(entity.getCartId(), entity.getUserIdx().getUserId(), entity.getCartQuantity(), CartStatus.valueOf(entity.getStatus()), entity.getTotalPrice()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<PurViewDto> getViewProduct(Long id) {
+        // id로 Customer 객체 조회
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new MyPageException("유저 정보를 찾을 수 없습니다. ID를 확인해주세요."));
 
-        // id로 구매했던 물품 조회
-        List<PurViewEntity> purViewEntityList = purViewRepository.findByUserIdx(id);
+        // Customer 객체의 userIdx로 구매했던 물품 조회
+        List<PurViewEntity> purViewEntityList = purViewRepository.findByUserIdx(customer.getUserId());
 
-        if (purViewEntityList == null || purViewEntityList.isEmpty()) {
+        if (purViewEntityList.isEmpty()) {
             throw new MyPageException("구매 이력을 찾을 수 없습니다. ID를 확인해주세요.");
         }
 
@@ -88,7 +103,6 @@ public class MyPageServiceImpl implements MyPageService {
                 .map(entity -> new PurViewDto(entity.getProductName(), entity.getProductPrice(), entity.getProductImg(), entity.getOrderEnroll()))
                 .collect(Collectors.toList());
     }
-
     @Override
     public int getPay(String email) {
 
@@ -119,7 +133,8 @@ public class MyPageServiceImpl implements MyPageService {
         }
 
         // id로 해당 유저 PayEntity 조회
-        PayEntity payEntity = payRepository.findByUserIdx(myPageEntity.getUserIdx());
+        PayEntity payEntity = payRepository.findByUserIdx(myPageEntity.getMyPageUserId().getUserId());
+
 
         if (payEntity == null) {
             throw new MyPageException("페이 정보를 찾을 수 없습니다.");

@@ -1,7 +1,7 @@
 package com.be01.prj2.entity.customer;
 
 import com.be01.prj2.entity.cart.Cart;
-import com.be01.prj2.entity.mypage.Mypage;
+import com.be01.prj2.entity.myPage.MyPageEntity;
 import com.be01.prj2.entity.order.Order;
 import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.role.Role;
@@ -51,7 +51,7 @@ public class Customer implements UserDetails {
     private List<Order> order;
 
     @OneToOne(mappedBy = "myPageUserId")
-    private Mypage mypage;
+    private MyPageEntity mypage;
 
 
     @Override

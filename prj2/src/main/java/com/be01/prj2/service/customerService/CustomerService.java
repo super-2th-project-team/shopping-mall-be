@@ -4,10 +4,13 @@ import com.be01.prj2.dto.customerDto.AddExtraInfoDto;
 import com.be01.prj2.dto.customerDto.LoginDto;
 import com.be01.prj2.dto.customerDto.SignupDto;
 import com.be01.prj2.entity.customer.Customer;
+import com.be01.prj2.entity.myPage.MyPageEntity;
+import com.be01.prj2.entity.myPage.PayEntity;
 import com.be01.prj2.exception.NotFoundException;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
-
+import com.be01.prj2.repository.myPage.MyPageRepository;
+import com.be01.prj2.repository.myPage.PayRepository;
 import com.be01.prj2.role.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +18,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,6 +36,8 @@ import java.util.Optional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final MyPageRepository myPageRepository;
+    private final PayRepository payRepository;
 
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
@@ -72,7 +76,26 @@ public class CustomerService {
                 .role(Role.USER)
                 .build();
         customerRepository.save(customer);
+
+        // PayEntity 생성 및 저장
+        PayEntity payEntity = new PayEntity();
+        payEntity.setUserIdx(customer.getUserId());
+        payEntity.setBalance(0);
+        payRepository.save(payEntity);
+
+        MyPageEntity myPageEntity = signupDto.myPageEntity(customer);
+        myPageRepository.save(myPageEntity);
+
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 완료입니다");
+    }
+
+    public MyPageEntity myPageEntity(Customer customer) {
+        return MyPageEntity.builder()
+                .myPageUserId(customer)
+                .email(customer.getEmail())
+                .mobile(customer.getMobile())
+                .name(customer.getName())
+                .build();
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package com.be01.prj2.dto.customerDto;
 
+import com.be01.prj2.entity.myPage.MyPageEntity;
 import com.be01.prj2.role.Role;
 import com.be01.prj2.entity.customer.Customer;
 import lombok.*;
@@ -19,6 +20,13 @@ public class SignupDto {
     private String mobile;
     private Role role;
 
+    // Mypage에 필요한 필드들 추가
+    private String profile;
+    private String myinfo;
+    private String address;
+    private char gender;
+    private String my_info;
+    private String profile_img;
     public Customer toEntity(){
         return Customer.builder()
                 .name(name)
@@ -29,4 +37,12 @@ public class SignupDto {
     }
 
 
+    public MyPageEntity myPageEntity(Customer customer) {
+        return MyPageEntity.builder()
+                .myPageUserId(customer)
+                .email(email)
+                .mobile(mobile)
+                .name(name)
+                .build();
+    }
 }

@@ -6,7 +6,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Builder
@@ -25,6 +24,10 @@ public class Order {
     @OneToOne
     @JoinColumn(name = "cart_id")
     private Cart cartId;
+
+    @ManyToOne
+    @JoinColumn(name = "order_user_id")
+    private Customer orderUserId;
 
     private Long totalPrice;
 

@@ -12,9 +12,8 @@ import lombok.*;
 public class CartDto {
 
     private Long cartId;
-    private Long buyerId;
-    private int totalQuantity;
+    private Long userIdx;
+    private int cartQuantity;
     private CartStatus status;
     private int totalPrice;
-
 }
