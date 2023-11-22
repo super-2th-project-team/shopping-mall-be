@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.boot:spring-boot-starter-oauth2-client:2.7.18-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework.boot" artifactId="spring-boot-starter-oauth2-client" version="2.7.18-SNAPSHOT" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-oauth2-client/2.7.18-SNAPSHOT/cf896525f0ac13a0c9b9ea023de52dce2df1ab20/spring-boot-starter-oauth2-client-2.7.18-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-oauth2-client/2.7.18-SNAPSHOT/8dcce24a8020456183cdee83116d4d893d901dbe/spring-boot-starter-oauth2-client-2.7.18-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

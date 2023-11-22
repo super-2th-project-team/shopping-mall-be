@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    username: root
+    password: zkvpfkxp12
+    url: jdbc:mysql://database-1.cahlafz8ipck.ap-northeast-2.rds.amazonaws.com/prj2
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: localhost
+    port: 6379
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        dialect: org.hibernate.dialect.MySQLDialect
+
+security:
+  jwt:
+    header: Authorization
+    secret: 시크릿키이야아아아아아아
+    token-validity-in-seconds: 604800
+
+
+mvc:
+  pathmatch:
+    matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+    org.springframework.security: DEBUG

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.boot:spring-boot-starter-data-redis:2.7.18-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework.boot" artifactId="spring-boot-starter-data-redis" version="2.7.18-SNAPSHOT" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-data-redis/2.7.18-SNAPSHOT/1e04525f8933dfb5c3aa6b5000ff657a8cdc8df7/spring-boot-starter-data-redis-2.7.18-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-data-redis/2.7.18-SNAPSHOT/571c0cc439c2a5dc4b82385f7d216acc7abe9627/spring-boot-starter-data-redis-2.7.18-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
