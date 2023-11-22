@@ -1,10 +1,8 @@
 package com.be01.prj2.entity.customer;
 
 import com.be01.prj2.entity.cart.Cart;
-import com.be01.prj2.entity.cart.CartProduct;
 import com.be01.prj2.entity.mypage.Mypage;
 import com.be01.prj2.entity.order.Order;
-import com.be01.prj2.entity.order.OrderProduct;
 import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.role.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

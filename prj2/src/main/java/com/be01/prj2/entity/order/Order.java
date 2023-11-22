@@ -26,27 +26,20 @@ public class Order {
     @JoinColumn(name = "cart_id")
     private Cart cartId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Customer orderUserId;
-
-    private Long productId;
-
     private Long totalPrice;
+
     private String address;
-    private String mobile;
+
     private String comment;
+
     private Date orderEnroll;
-    private String addressee; //수령인
 
-    @OneToMany(mappedBy = "orderCartId")
-    private List<OrderProduct> orderProductList;
+    private String addressee; //수령인, 주소 ?
 
-    @OneToMany(mappedBy = "orderUserId")
-    private List<OrderProduct> orderProducts;
 
-    @OneToMany(mappedBy = "orderId")
-    private List<OrderProduct> orderProductsOrderId;
+
+
+
 
 
 

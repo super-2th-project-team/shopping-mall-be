@@ -2,6 +2,7 @@ package com.be01.prj2.service.cartService;
 
 import com.be01.prj2.dto.cartDto.CartDto;
 import com.be01.prj2.dto.cartDto.CartProductDto;
+import com.be01.prj2.dto.cartDto.CartProductUpdateDto;
 import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.entity.cart.CartProduct;
 import com.be01.prj2.entity.customer.Customer;
@@ -90,7 +91,7 @@ public class CartService {
                 .collect(Collectors.toList());
     }
     //DTO 로 변환
-    private CartProductDto convertToDto(CartProduct cartProduct) {
+    public CartProductDto convertToDto(CartProduct cartProduct) {
         return CartProductDto.builder()
                 .cartId(cartProduct.getCartId().getCartId())
                 .productId(cartProduct.getProductId().getProductId())
@@ -100,6 +101,22 @@ public class CartService {
                 .size(cartProduct.getSize())
                 .build();
     }
+
+    public CartProductDto update(Long cartProductIdx,CartProductUpdateDto cartProductUpdateDto){
+
+        CartProduct myCart = cartProductRepository
+                .findByCartProductIdx(cartProductIdx);
+
+
+        myCart.setCartQuantity(cartProductUpdateDto.getCartQuantity());
+        myCart.setColor(cartProductUpdateDto.getColor());
+        myCart.setSize(cartProductUpdateDto.getSize());
+        cartProductRepository.save(myCart);
+        return convertToDto(myCart);
+
+    }
+
+
 
 
 

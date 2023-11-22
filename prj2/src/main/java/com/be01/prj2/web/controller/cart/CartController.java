@@ -2,6 +2,7 @@ package com.be01.prj2.web.controller.cart;
 
 import com.be01.prj2.dto.cartDto.CartDto;
 import com.be01.prj2.dto.cartDto.CartProductDto;
+import com.be01.prj2.dto.cartDto.CartProductUpdateDto;
 import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.entity.cart.CartProduct;
 import com.be01.prj2.entity.customer.Customer;
@@ -76,6 +77,13 @@ public class CartController {
             return null;
         }
 
+    }
+
+    @PostMapping("/update/{cartProductIdx}")
+    public CartProductDto update(@PathVariable("cartProductIdx") Long cartProductIdx,
+                                 @RequestBody CartProductUpdateDto cartProductUpdateDto){
+
+        return cartService.update(cartProductIdx,cartProductUpdateDto);
     }
 
 
