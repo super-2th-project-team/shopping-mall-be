@@ -17,6 +17,5 @@ public interface CartProductRepository extends JpaRepository<CartProduct, Long> 
 
     CartProduct findByCartIdAndProductIdAndColorAndSize(Cart cart, Product product, String color, String size);
 
-
     CartProduct findByCartProductIdx(Long cartProductIdx);
 }
