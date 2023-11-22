@@ -36,15 +36,4 @@ public class Order {
 
     private String addressee; //수령인, 주소 ?
 
-
-
-
-
-
-
-
-
-
-
-
 }

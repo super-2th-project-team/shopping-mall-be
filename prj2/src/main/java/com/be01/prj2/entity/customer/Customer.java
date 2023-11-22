@@ -42,13 +42,9 @@ public class Customer implements UserDetails {
     @OneToMany(mappedBy = "sellerId")
     private List<Product> products;
 
-
     @OneToOne(mappedBy = "userIdx")
     @JsonManagedReference
     private Cart cart;
-
-    @OneToMany(mappedBy = "orderUserId")
-    private List<Order> order;
 
     @OneToOne(mappedBy = "myPageUserId")
     private Mypage mypage;

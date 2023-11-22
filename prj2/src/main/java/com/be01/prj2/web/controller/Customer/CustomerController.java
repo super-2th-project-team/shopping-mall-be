@@ -5,8 +5,10 @@ import com.be01.prj2.dto.customerDto.LoginDto;
 
 import com.be01.prj2.dto.customerDto.SignupDto;
 import com.be01.prj2.entity.customer.Customer;
+import com.be01.prj2.exception.FileUploadFailedException;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
+import com.be01.prj2.service.S3Service.S3Service;
 import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +34,7 @@ public class CustomerController {
     private final CustomerRepository customerRepository;
     private final TokenProvider tokenProvider;
     private final RedisTemplate<String , String > redisTemplate;
+    private final S3Service s3Service;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody SignupDto signupDto){
@@ -86,6 +90,17 @@ public class CustomerController {
     private ResponseEntity<?> addInfo(@RequestHeader("access_token")String token ,@RequestBody AddExtraInfoDto addExtraInfoDto){
         customerService.addExtraInfo(token, addExtraInfoDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("저장 되었습니다!");
+    }
+
+    //프로필 이미지 업로드
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadProfile(@RequestHeader("access_token")String token,
+                                           @RequestPart(value = "file")MultipartFile multipartFile) throws FileUploadFailedException {
+
+        String email = tokenProvider.getEmailBytoken(token);
+
+        s3Service.uploadProfile(email, multipartFile);
+        return ResponseEntity.status(HttpStatus.CREATED).body("파일 업로드 성공했습니다");
     }
 
 }
