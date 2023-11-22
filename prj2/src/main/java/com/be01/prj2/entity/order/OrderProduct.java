@@ -1,4 +1,4 @@
-package com.be01.prj2.entity;
+package com.be01.prj2.entity.order;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "order_product")
-public class OrderProductEntity {
+public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;

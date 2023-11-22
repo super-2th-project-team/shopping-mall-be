@@ -1,8 +1,6 @@
-package com.be01.prj2.Dto;
+package com.be01.prj2.dto.cartDto;
 
 import lombok.*;
-
-import javax.persistence.Entity;
 
 @Getter
 @Setter

@@ -1,5 +1,7 @@
-package com.be01.prj2.entity;
+package com.be01.prj2.entity.order;
 
+import com.be01.prj2.entity.customer.Customer;
+import com.be01.prj2.entity.cart.Cart;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +16,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "orders")
-public class OrdersEntity {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_idx")
@@ -31,19 +33,18 @@ public class OrdersEntity {
     private String mobile;
     private String Comment;
     private Date orderEnroll;
+    private String addressee; // 수령인
 
-    @Column(name = "product_price")
-    private int productPrice;
+    @OneToMany(mappedBy = "orderCartId")
+    private List<OrderProduct> orderProductList;
+
+    @OneToMany(mappedBy = "orderUserId")
+    private List<OrderProduct> orderProducts;
+
+    @OneToMany(mappedBy = "orderId")
+    private List<OrderProduct> orderProductsOrderId;
 
 
-    @Column(name = "order_enroll")
-    private Timestamp orderEnroll;
-
-
-
-
-    @Column(name = "order_quantity")
-    private int orderQuantity;
 
 }
 

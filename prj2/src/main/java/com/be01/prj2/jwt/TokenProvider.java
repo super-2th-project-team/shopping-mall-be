@@ -1,4 +1,4 @@
-package com.be01.prj2.jwt_Customer;
+package com.be01.prj2.jwt;
 
 import com.be01.prj2.role.Role;
 
@@ -13,7 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import com.be01.prj2.repository_Customer.customUserDetails.CustomUserDetails;
+import com.be01.prj2.repository.customerRepository.customUserDetails.CustomUserDetails;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;

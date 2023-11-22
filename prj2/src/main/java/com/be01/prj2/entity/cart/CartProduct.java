@@ -1,28 +1,31 @@
 package com.be01.prj2.entity.cart;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
-@NoArgsConstructor
+
+
 @Entity
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "cart_product")
-public class CartProductEntity {
+public class CartProduct {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_id")
     private Long cartId;
 
-    @Column(name = "user_idx", nullable = false)
-    private Long userIdx;
+    @ManyToOne
+    private Cart cartCustomerId;
 
-    @Column(name = "cart_quantity", nullable = false)
     private int cartQuantity;
+    private int price;
 
-    @Column(name = "total_price", nullable = false)
-    private int totalPrice;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product productId;
 
-    @Column(name = "product_id", nullable = false)
-    private Long productId;
 }

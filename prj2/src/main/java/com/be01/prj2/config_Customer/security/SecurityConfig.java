@@ -1,6 +1,6 @@
 package com.be01.prj2.config_Customer.security;
 
-import com.be01.prj2.jwt_Customer.TokenProvider;
+import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.web_Customer.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

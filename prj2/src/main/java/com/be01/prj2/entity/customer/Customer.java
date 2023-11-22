@@ -1,7 +1,9 @@
-package com.be01.prj2.entity_Customer;
+package com.be01.prj2.entity.customer;
 
+import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.role.Role;
 import lombok.*;
+import org.hibernate.criterion.Order;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,6 +35,19 @@ public class Customer implements UserDetails {
     private String address;
     private String profileImg;
     private Role role;
+
+    @OneToMany(mappedBy = "sellerId")
+    private List<product> products;
+
+
+    @OneToOne(mappedBy = "buyerId")
+    private Cart cart;
+
+    @OneToMany(mappedBy = "orderUserId")
+    private List<Order> order;
+
+    @OneToOne(mappedBy = "myPageUserId")
+    private Mypage mypage;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

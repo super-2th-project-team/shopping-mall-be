@@ -1,4 +1,4 @@
-package com.be01.prj2.role_Customer;
+package com.be01.prj2.role;
 
 public enum Role {
     USER("ROLE_USER"),

@@ -1,6 +1,6 @@
 package com.be01.prj2.Controller;
 
-import com.be01.prj2.service.ProductService;
+import com.be01.prj2.service.ProductService.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +22,9 @@ public class ProductController<Product> {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAllProducts() {
+    public ResponseEntity<List<Product>> getAllProducts() {
         try {
-            List<Product> products = productService.findAllProducts();
+            List<Product> products = (List<Product>) productService.getAllProducts();
             if (products.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

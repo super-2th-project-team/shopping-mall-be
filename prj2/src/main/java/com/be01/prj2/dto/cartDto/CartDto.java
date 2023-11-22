@@ -1,4 +1,4 @@
-package com.be01.prj2.Dto;
+package com.be01.prj2.dto.cartDto;
 
 import lombok.*;
 
@@ -15,5 +15,6 @@ public class CartDto {
     private Long buyerId;
     private Long totalQuantity;
     private Long totalPrice;
+    Private CartStatus status;
 
 }

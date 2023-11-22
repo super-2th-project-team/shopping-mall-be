@@ -1,40 +1,43 @@
-package com.be01.prj2.entity;
+package com.be01.prj2.entity.product;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.be01.prj2.entity.cart.CartProduct;
+import com.be01.prj2.entity.customer.Customer;
+import com.be01.prj2.entity.order.OrderProduct;
+
+import lombok.*;
+
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 
-@Data
-@NoArgsConstructor
+
 @Entity
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "product")
-public class ProductEntity {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Long productId;
 
-    @Column(name = "product_name", nullable = false)
+    @Column(name = "product_name")
     private String productName;
 
-    @Column(name = "product_price", nullable = false)
-    private int productPrice;
 
-    @Column(name = "product_info", nullable = false)
+    private int productPrice;
     private String productInfo;
 
-    @Column(name = "product_stock", nullable = false)
-    private int productStock;
+    private Integer productStock;
+    private Integer productSell;
 
-    @Column(name = "product_sell", nullable = false)
-    private int productSell;
+    private Date productEnroll;
 
-    @Column(name = "product_enroll", nullable = false)
-    private Timestamp productEnroll;
-
-    @Column(name = "product_img", nullable = false)
     private String productImg;
+    private String category;
+    private String subCategory;
 
 
 }

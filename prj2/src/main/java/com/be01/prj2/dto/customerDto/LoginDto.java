@@ -1,6 +1,6 @@
-package com.be01.prj2.dto_Customer;
+package com.be01.prj2.dto.customerDto;
 
-import com.be01.prj2.entity_Customer.Customer;
+import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.role.Role;
 import lombok.*;
 

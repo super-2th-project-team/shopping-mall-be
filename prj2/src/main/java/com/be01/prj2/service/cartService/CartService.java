@@ -1,13 +1,10 @@
-package com.be01.prj2.service;
+package com.be01.prj2.service.cartService;
 
 import com.be01.prj2.entity.cart.CartEntity;
 import com.be01.prj2.repository.cartRepository.CartRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
