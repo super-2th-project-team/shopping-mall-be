@@ -10,13 +10,13 @@ public interface MyPageService {
 
     MyPageDto getMyPageInfo(String email);
 
-    List<CartDto> getCartProduct(Long id);
-
-    List<PurViewDto> getViewProduct(Long id);
-
     public MyPageDto updateMyPageInfo(String email, MyPageDto updateMtPageInfo);
 
     int getPay(String email);
 
     int chargePay(String email, int mount);
+
+    List<CartDto> getCartProductByEmail(String email);
+
+    List<PurViewDto> getViewProductByEmail(String email);
 }

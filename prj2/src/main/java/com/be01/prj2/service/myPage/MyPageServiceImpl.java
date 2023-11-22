@@ -64,17 +64,19 @@ public class MyPageServiceImpl implements MyPageService {
                 myPageEntity.getAddress(), myPageEntity.getGender(), myPageEntity.getMyInfo(), myPageEntity.getProfile(), myPageEntity.getProfileImg());
     }
 
-    @Override
-    public List<CartDto> getCartProduct(Long id) {
-        // id로 Customer 객체 조회
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new MyPageException("유저 정보를 찾을 수 없습니다. ID를 확인해주세요."));
-
+    public List<CartDto> getCartProductByEmail(String email) {
+        // email로 MyPageEntity 객체 조회
+        MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
+        if (myPageEntity == null) {
+            throw new MyPageException("유저 정보를 찾을 수 없습니다. email을 확인해주세요.");
+        }
+        // MyPageEntity 객체로 Customer 객체 조회
+        Customer customer = myPageEntity.getMyPageUserId();
         // Customer 객체로 장바구니 물품 조회
         Cart cartEntity = cartRepository.findByUserIdx(customer);
 
         if (cartEntity == null) {
-            throw new MyPageException("장바구니 정보를 찾을 수 없습니다. ID를 확인해주세요.");
+            throw new MyPageException("장바구니 정보를 찾을 수 없습니다. email을 확인해주세요.");
         }
 
         // 조회된 Cart 객체를 List에 담음
@@ -82,27 +84,29 @@ public class MyPageServiceImpl implements MyPageService {
         cartEntityList.add(cartEntity);
 
         return cartEntityList.stream()
-                .map(entity -> new CartDto(entity.getCartId(), entity.getUserIdx().getUserId(), entity.getCartQuantity(), CartStatus.valueOf(entity.getStatus()), entity.getTotalPrice()))
+                .map(entity -> new CartDto(entity.getCartId(), entity.getUserIdx().getUserId(), entity.getCartQuantity(), CartStatus.fromString(entity.getStatus()), entity.getTotalPrice()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<PurViewDto> getViewProduct(Long id) {
-        // id로 Customer 객체 조회
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new MyPageException("유저 정보를 찾을 수 없습니다. ID를 확인해주세요."));
-
+    public List<PurViewDto> getViewProductByEmail(String email) {
+        // email로 MyPageEntity 객체 조회
+        MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
+        if (myPageEntity == null) {
+            throw new MyPageException("유저 정보를 찾을 수 없습니다. email을 확인해주세요.");
+        }
         // Customer 객체의 userIdx로 구매했던 물품 조회
-        List<PurViewEntity> purViewEntityList = purViewRepository.findByUserIdx(customer.getUserId());
+        List<PurViewEntity> purViewEntityList = purViewRepository.findByUserIdx(myPageEntity.getMyPageUserId().getUserId());
 
         if (purViewEntityList.isEmpty()) {
-            throw new MyPageException("구매 이력을 찾을 수 없습니다. ID를 확인해주세요.");
+            throw new MyPageException("구매 이력을 찾을 수 없습니다. email을 확인해주세요.");
         }
 
         return purViewEntityList.stream()
                 .map(entity -> new PurViewDto(entity.getProductName(), entity.getProductPrice(), entity.getProductImg(), entity.getOrderEnroll()))
                 .collect(Collectors.toList());
     }
+
     @Override
     public int getPay(String email) {
 

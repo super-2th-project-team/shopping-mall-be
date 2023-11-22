@@ -42,11 +42,13 @@ public class TokenProvider {
     //토큰 생성
     public String createAccessToken(String email){
 
+        return getString(email, accesstokenValidSecond, "ROLE_" + Role.USER.name());
+    }
+    private String getString(String email, long accesstokenValidSecond, String role) {
         Claims claims = Jwts.claims().setSubject(email);
-        claims.put("role", Role.USER);
+        claims.put("role", role);
         Date now = new Date();
         Date acceessValidate = new Date(now.getTime() + accesstokenValidSecond);
-
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -56,28 +58,18 @@ public class TokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
+
     public String createRefreshToken(String email){
-
-        Claims claims = Jwts.claims().setSubject(email);
-        claims.put("role", Role.USER);
-        Date now = new Date();
-        Date refreshValidate = new Date(now.getTime() + refreshtokenValidSecond);
-
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(email)
-                .setExpiration(refreshValidate)
-                .setIssuedAt(now)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
+        return getString(email, refreshtokenValidSecond, "ROLE_" + Role.USER.name());
     }
 
 
     //토큰에서 인증 정보조회
     public Authentication getAuthentication(String token){
         UserDetails userDetails = customUserDetails.loadUserByUsername(this.getUserEmail(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), "", userDetails.getAuthorities());
+        log.info("Authentication authorities: " + authentication.getAuthorities());
+        return authentication;
     }
 
     //토큰에서 회원정보 추출
@@ -91,18 +83,21 @@ public class TokenProvider {
 
     //토큰 값 가져오기
     public String resolveToken(HttpServletRequest request){
-        return request.getHeader("Accesstoken");
+        String token = request.getHeader("access_token");
+        log.info("Resolved token: " + token);
+        return token;
     }
     public boolean validateToken(String jwtToken) {
-        try{
+        try {
             Claims claims = Jwts.parser()
                     .setSigningKey(secretKey)
                     .parseClaimsJws(jwtToken)
                     .getBody();
             Date now = new Date();
-            return claims.getExpiration()
-                    .after(now);
-        }catch (Exception e){
+            boolean isValid = claims.getExpiration().after(now);
+            log.info("Token validation result: " + isValid);
+            return isValid;
+        } catch (Exception e) {
             return false;
         }
     }

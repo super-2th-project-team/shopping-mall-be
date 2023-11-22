@@ -42,7 +42,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/resources/static/**", "/api/register", "/api/login").permitAll()
-                .antMatchers("/api/refresh/", "/api/signout/","/api/logout/", "/api/test/", "api/addInfo/").hasRole("USER")
+                .antMatchers("/api/refresh/", "/api/signout/","/api/logout/", "/api/test/", "api/addInfo/",
+                             "/mypage/me", "/mypage/me/cart", "/mypage/me/view", "/mypage/me/pay").hasRole("USER")
                 //나중에 글 작성 api에 Role_user
                 .and()
                 .exceptionHandling()

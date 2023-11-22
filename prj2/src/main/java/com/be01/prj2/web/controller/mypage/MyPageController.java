@@ -3,6 +3,7 @@ package com.be01.prj2.web.controller.mypage;
 import com.be01.prj2.dto.cartDto.CartDto;
 import com.be01.prj2.dto.myPage.MyPageDto;
 import com.be01.prj2.dto.myPage.PurViewDto;
+import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.service.myPage.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,54 +19,48 @@ import java.util.Map;
 public class MyPageController {
 
     private final MyPageService myPageService;
+    private final TokenProvider tokenProvider;
 
-    @GetMapping("/{email}")
-/*    @Tag(name = "MY PAGE")
-    @Operation(summary = "유저 정보 조회", description = "유저 정보 조회 API")*/
-    public MyPageDto getMyPageInfo(@PathVariable String email) {
-
+    // 마이페이지 조회
+    @GetMapping("/me")
+    public MyPageDto getMyPageInfo(@RequestHeader("access_token") String accessToken) {
+        String email = tokenProvider.getEmailBytoken(accessToken);
         return myPageService.getMyPageInfo(email);
     }
 
-    @PutMapping("/{email}")
-/*    @Tag(name = "MY PAGE")
-    @Operation(summary = "유저 정보 수정", description = "유저 정보 수정 API")*/
-    public MyPageDto updateMyPageInfo(@PathVariable String email, @RequestBody MyPageDto updatedMyPageInfo) {
-
+    // 마이페이지 수정
+    @PutMapping("/me")
+    public MyPageDto updateMyPageInfo(@RequestHeader("access_token") String accessToken, @RequestBody MyPageDto updatedMyPageInfo) {
+        String email = tokenProvider.getEmailBytoken(accessToken);
         return myPageService.updateMyPageInfo(email, updatedMyPageInfo);
     }
 
-    @GetMapping("/{id}/cart")
-/*    @Tag(name = "MY PAGE")
-    @Operation(summary = "장바구니 물품 리스트 조회", description = "장바구니 물품 리스트 조회 API")*/
-    public List<CartDto> getCartProduct(@PathVariable Long id) {
-
-        return myPageService.getCartProduct(id);
+    // 장바구니 조회
+    @GetMapping("/me/cart")
+    public List<CartDto> getCartProduct(@RequestHeader("access_token") String accessToken) {
+        String email = tokenProvider.getEmailBytoken(accessToken);
+        return myPageService.getCartProductByEmail(email);
     }
 
-    @GetMapping("/{id}/view")
-/*    @Tag(name = "MY PAGE")
-    @Operation(summary = "구매했던 물품 조회", description = "구매했던 물품 리스트 조회 API")*/
-    public List<PurViewDto> getViewProduct(@PathVariable Long id) {
-
-        return myPageService.getViewProduct(id);
+    // 구매했던 물품 조회
+    @GetMapping("/me/view")
+    public List<PurViewDto> getViewProduct(@RequestHeader("access_token") String accessToken) {
+        String email = tokenProvider.getEmailBytoken(accessToken);
+        return myPageService.getViewProductByEmail(email);
     }
 
-    @GetMapping("/{email}/pay")
-/*    @Tag(name = "MY PAGE")
-    @Operation(summary = "페이머니 조회", description = "페이머니 조회 API")*/
-    public int getPay(@PathVariable String email) {
-
+    // 페이 조회
+    @GetMapping("/me/pay")
+    public int getPay(@RequestHeader("access_token") String accessToken) {
+        String email = tokenProvider.getEmailBytoken(accessToken);
         return myPageService.getPay(email);
     }
 
-    @PostMapping("/{email}/pay")
-/*    @Tag(name = "MY PAGE")
-    @Operation(summary = "페이머니 충전", description = "페이머니 충전 API")*/
-    public int chargePay(@PathVariable String email, @RequestBody Map<String, Integer> payload) {
-
+    // 페이 충전
+    @PostMapping("/me/pay")
+    public int chargePay(@RequestHeader("access_token") String accessToken, @RequestBody Map<String, Integer> payload) {
+        String email = tokenProvider.getEmailBytoken(accessToken);
         int amount = payload.get("amount");
-
         return myPageService.chargePay(email, amount);
     }
 }
