@@ -42,7 +42,8 @@ public class Cart {
     private List<CartProduct> cartProducts;
 
     @OneToOne(mappedBy = "cartId")
-    private Order orderCartId;
+    private Order order;
+
 
     public static Cart createCart(Customer customer){
         Cart cart = new Cart();

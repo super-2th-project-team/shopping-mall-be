@@ -2,7 +2,6 @@ package com.be01.prj2.entity.product;
 
 import com.be01.prj2.entity.cart.CartProduct;
 import com.be01.prj2.entity.customer.Customer;
-import com.be01.prj2.entity.order.OrderProduct;
 import lombok.*;
 
 import javax.persistence.*;
@@ -49,14 +48,8 @@ public class Product {
     @JoinColumn(name = "seller_idx") //자기 테이블의 실제 컬럼명
     private Customer sellerId;
 
-    @OneToMany(mappedBy = "orderProductId") // mappedBy 속성은 Product 엔터티에 있는 필드명을 나타냅니다.
-    private List<OrderProduct> orderProducts;
-
     @OneToMany(mappedBy = "productId")
     private List<CartProduct> cartProducts; //장바구니에 담길 상품들
 
-
-    @OneToMany(mappedBy = "orderProductSellerId")
-    private List<OrderProduct> orderProductsId;
 
 }

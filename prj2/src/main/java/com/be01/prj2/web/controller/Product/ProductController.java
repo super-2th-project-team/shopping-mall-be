@@ -36,7 +36,7 @@ public class ProductController {
     //토큰을 받아서 상품 등록
     @PostMapping("/register")
     public ResponseEntity<?> registerProduct(@RequestBody SellDto sellDto,
-                                          @RequestHeader("access_token")String token){
+                                             @RequestHeader("access_token")String token){
 
         String email = tokenProvider.getEmailBytoken(token);
         Optional<Customer> seller = customerRepository.findByEmail(email);
