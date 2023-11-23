@@ -5,7 +5,7 @@ import com.be01.prj2.dto.customerDto.LoginDto;
 import com.be01.prj2.dto.customerDto.SignupDto;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.myPage.MyPageEntity;
-import com.be01.prj2.entity.myPage.PayEntity;
+import com.be01.prj2.entity.pay.PayEntity;
 import com.be01.prj2.exception.NotFoundException;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
@@ -83,7 +83,11 @@ public class CustomerService {
         payEntity.setBalance(0);
         payRepository.save(payEntity);
 
-        MyPageEntity myPageEntity = signupDto.myPageEntity(customer);
+        customer.setPayEntity(payEntity);
+        customerRepository.save(customer);
+
+        // MyPageEntity 생성 및 저장
+        MyPageEntity myPageEntity = myPageEntity(customer);
         myPageRepository.save(myPageEntity);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 완료입니다");
@@ -136,6 +140,11 @@ public class CustomerService {
             throw new BadCredentialsException("잘못된 자격 증명 입니다.");
         }
     }
+
+    public Optional<Customer> findByEmail(String email) {
+        return customerRepository.findByEmail(email);
+    }
+
     //리프레쉬로 access 토큰 재발급
     @Transactional
     public String createAccessTokenByRefresh(String email) {

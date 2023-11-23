@@ -1,27 +1,21 @@
 package com.be01.prj2.service.cartService;
 
-import com.be01.prj2.dto.cartDto.CartDto;
 import com.be01.prj2.dto.cartDto.CartProductDto;
 import com.be01.prj2.dto.cartDto.CartProductUpdateDto;
 import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.entity.cart.CartProduct;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.product.Product;
-import com.be01.prj2.entity.product.ProductColor;
 import com.be01.prj2.repository.cartRepository.CartProductRepository;
 import com.be01.prj2.repository.cartRepository.CartRepository;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
 import com.be01.prj2.repository.productRepository.ProductRepository;
-import com.be01.prj2.role.CartStatus;
 import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -115,9 +109,5 @@ public class CartService {
         return convertToDto(myCart);
 
     }
-
-
-
-
 
 }

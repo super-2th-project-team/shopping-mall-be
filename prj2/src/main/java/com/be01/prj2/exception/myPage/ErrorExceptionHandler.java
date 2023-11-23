@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class MyPageExceptionHandler {
+public class ErrorExceptionHandler {
 
     @ExceptionHandler(MyPageException.class)
     public ResponseEntity<String> handleMyPageException(MyPageException e) {

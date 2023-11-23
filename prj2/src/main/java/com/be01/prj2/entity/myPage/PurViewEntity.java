@@ -1,13 +1,6 @@
 package com.be01.prj2.entity.myPage;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.Date;
-
-@Entity
+/*@Entity
 @Getter
 @NoArgsConstructor
 @Table(name = "purview")
@@ -42,4 +35,4 @@ public class PurViewEntity {
         this.productImg = productImg;
         this.orderEnroll = orderEnroll;
     }
-}
+}*/

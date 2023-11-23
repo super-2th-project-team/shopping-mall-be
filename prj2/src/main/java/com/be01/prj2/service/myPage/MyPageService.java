@@ -2,7 +2,6 @@ package com.be01.prj2.service.myPage;
 
 import com.be01.prj2.dto.cartDto.CartDto;
 import com.be01.prj2.dto.myPage.MyPageDto;
-import com.be01.prj2.dto.myPage.PurViewDto;
 
 import java.util.List;
 
@@ -18,5 +17,5 @@ public interface MyPageService {
 
     List<CartDto> getCartProductByEmail(String email);
 
-    List<PurViewDto> getViewProductByEmail(String email);
+//    List<PurViewDto> getViewProductByEmail(String email);
 }

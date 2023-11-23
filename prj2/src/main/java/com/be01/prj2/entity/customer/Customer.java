@@ -2,7 +2,7 @@ package com.be01.prj2.entity.customer;
 
 import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.entity.myPage.MyPageEntity;
-import com.be01.prj2.entity.order.Order;
+import com.be01.prj2.entity.pay.PayEntity;
 import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.role.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -42,17 +42,19 @@ public class Customer implements UserDetails {
     @OneToMany(mappedBy = "sellerId")
     private List<Product> products;
 
+    @OneToOne
+    @JoinColumns({
+            @JoinColumn(name="pay_entity_user_idx", referencedColumnName="user_idx"),
+            @JoinColumn(name="pay_entity_pay_idx", referencedColumnName="pay_idx")
+    })
+    private PayEntity payEntity;
 
     @OneToOne(mappedBy = "userIdx")
     @JsonManagedReference
     private Cart cart;
 
-    @OneToMany(mappedBy = "orderUserId")
-    private List<Order> order;
-
     @OneToOne(mappedBy = "myPageUserId")
     private MyPageEntity mypage;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

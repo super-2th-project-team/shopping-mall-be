@@ -1,23 +1,25 @@
-package com.be01.prj2.entity.myPage;
+package com.be01.prj2.entity.pay;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "pay")
-public class PayEntity {
+public class PayEntity implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "pay_idx")
+    private Long payIdx;
+
     @Column(name = "user_idx")
     private Long userIdx;
 

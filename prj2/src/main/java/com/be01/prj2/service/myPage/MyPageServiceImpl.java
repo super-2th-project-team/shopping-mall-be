@@ -2,18 +2,16 @@ package com.be01.prj2.service.myPage;
 
 import com.be01.prj2.dto.cartDto.CartDto;
 import com.be01.prj2.dto.myPage.MyPageDto;
-import com.be01.prj2.dto.myPage.PurViewDto;
 import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.myPage.MyPageEntity;
-import com.be01.prj2.entity.myPage.PayEntity;
-import com.be01.prj2.entity.myPage.PurViewEntity;
+import com.be01.prj2.entity.pay.PayEntity;
+import com.be01.prj2.exception.myPage.ErrorMessage;
 import com.be01.prj2.exception.myPage.MyPageException;
 import com.be01.prj2.repository.cartRepository.CartRepository;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
 import com.be01.prj2.repository.myPage.MyPageRepository;
 import com.be01.prj2.repository.myPage.PayRepository;
-import com.be01.prj2.repository.myPage.PurViewRepository;
 import com.be01.prj2.role.CartStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,7 @@ public class MyPageServiceImpl implements MyPageService {
 
     private final MyPageRepository myPageRepository;
     private final CartRepository cartRepository;
-    private final PurViewRepository purViewRepository;
+//    private final PurViewRepository purViewRepository;
     private final PayRepository payRepository;
     private final CustomerRepository customerRepository;
 
@@ -40,7 +38,7 @@ public class MyPageServiceImpl implements MyPageService {
         MyPageEntity mypageEntity = myPageRepository.findByEmail(email);
 
         if (mypageEntity == null) {
-            throw new MyPageException("유저 정보를 찾을 수 없습니다. email을 확인해주세요.");
+            throw new MyPageException(ErrorMessage.USER_NOT_FOUND);
         }
 
         // 변경된 엔티티 정보 반환
@@ -54,7 +52,7 @@ public class MyPageServiceImpl implements MyPageService {
         MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
 
         if (myPageEntity == null) {
-            throw new MyPageException("유저 정보 수정에 실패했습니다. email을 확인해주세요.");
+            throw new MyPageException(ErrorMessage.USER_UPDATE_FAILED);
         }
 
         myPageEntity.updateMyPage(myPageDto);
@@ -68,7 +66,7 @@ public class MyPageServiceImpl implements MyPageService {
         // email로 MyPageEntity 객체 조회
         MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
         if (myPageEntity == null) {
-            throw new MyPageException("유저 정보를 찾을 수 없습니다. email을 확인해주세요.");
+            throw new MyPageException(ErrorMessage.USER_NOT_FOUND);
         }
         // MyPageEntity 객체로 Customer 객체 조회
         Customer customer = myPageEntity.getMyPageUserId();
@@ -76,7 +74,7 @@ public class MyPageServiceImpl implements MyPageService {
         Cart cartEntity = cartRepository.findByUserIdx(customer);
 
         if (cartEntity == null) {
-            throw new MyPageException("장바구니 정보를 찾을 수 없습니다. email을 확인해주세요.");
+            throw new MyPageException(ErrorMessage.CART_NOT_FOUND);
         }
 
         // 조회된 Cart 객체를 List에 담음
@@ -88,7 +86,7 @@ public class MyPageServiceImpl implements MyPageService {
                 .collect(Collectors.toList());
     }
 
-    @Override
+/*    @Override
     public List<PurViewDto> getViewProductByEmail(String email) {
         // email로 MyPageEntity 객체 조회
         MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
@@ -105,7 +103,7 @@ public class MyPageServiceImpl implements MyPageService {
         return purViewEntityList.stream()
                 .map(entity -> new PurViewDto(entity.getProductName(), entity.getProductPrice(), entity.getProductImg(), entity.getOrderEnroll()))
                 .collect(Collectors.toList());
-    }
+    }*/
 
     @Override
     public int getPay(String email) {
@@ -133,7 +131,7 @@ public class MyPageServiceImpl implements MyPageService {
         MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
 
         if (myPageEntity == null) {
-            throw new MyPageException("유저 정보를 찾을 수 없습니다. email을 확인해주세요.");
+            throw new MyPageException(ErrorMessage.USER_NOT_FOUND);
         }
 
         // id로 해당 유저 PayEntity 조회
@@ -141,7 +139,7 @@ public class MyPageServiceImpl implements MyPageService {
 
 
         if (payEntity == null) {
-            throw new MyPageException("페이 정보를 찾을 수 없습니다.");
+            throw new MyPageException(ErrorMessage.PAY_NOT_FOUND);
         }
 
         return payEntity;

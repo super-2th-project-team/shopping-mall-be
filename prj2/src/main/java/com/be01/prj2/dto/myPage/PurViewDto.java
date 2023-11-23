@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Getter
+/*@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PurViewDto {
@@ -15,4 +15,4 @@ public class PurViewDto {
     private int productPrice;
     private String productImg;
     private Date orderEnroll;
-}
+}*/

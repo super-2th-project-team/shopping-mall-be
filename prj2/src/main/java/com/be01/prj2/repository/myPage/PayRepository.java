@@ -1,6 +1,6 @@
 package com.be01.prj2.repository.myPage;
 
-import com.be01.prj2.entity.myPage.PayEntity;
+import com.be01.prj2.entity.pay.PayEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PayRepository extends JpaRepository<PayEntity, Long> {
