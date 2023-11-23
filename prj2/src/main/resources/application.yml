@@ -48,8 +48,7 @@ logging:
 cloud:
   aws:
     s3:
-      bucket: user-profile-prj2-supercoding
-    credentials:
+      bucket: user-profile-prj2
       access-key: ${access-key}
       secret-key: ${secret-key}
     region:
