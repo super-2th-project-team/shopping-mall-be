@@ -5,7 +5,9 @@ import com.be01.prj2.entity.myPage.MyPageEntity;
 import com.be01.prj2.entity.pay.PayEntity;
 import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.role.Role;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +24,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "userId")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "customer")
 public class Customer implements UserDetails {
 
@@ -50,7 +56,6 @@ public class Customer implements UserDetails {
     private PayEntity payEntity;
 
     @OneToOne(mappedBy = "userIdx")
-    @JsonManagedReference
     private Cart cart;
 
     @OneToOne(mappedBy = "myPageUserId")

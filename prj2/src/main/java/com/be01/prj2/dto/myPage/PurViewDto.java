@@ -6,13 +6,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-/*@Getter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PurViewDto {
 
-    private String productName;
-    private int productPrice;
-    private String productImg;
+    private Long orderId;
+    private Long productId;
+    private Long totalPrice;
     private Date orderEnroll;
-}*/
+    private String addressee;
+    private String address;
+    private String mobile;
+    private String comment;
+}

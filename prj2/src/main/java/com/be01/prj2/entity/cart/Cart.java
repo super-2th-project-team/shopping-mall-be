@@ -3,8 +3,7 @@ package com.be01.prj2.entity.cart;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.order.Order;
 import com.be01.prj2.role.CartStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,6 +15,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "cartId")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "cart")
 public class Cart {
     @Id
@@ -25,7 +28,6 @@ public class Cart {
 
     @OneToOne
     @JoinColumn(name = "user_idx")
-    @JsonManagedReference
     private Customer userIdx;
 
     @Column(name = "cart_quantity")
@@ -42,6 +44,7 @@ public class Cart {
     private List<CartProduct> cartProducts;
 
     @OneToOne(mappedBy = "cartId")
+    @JsonManagedReference
     private Order orderCartId;
 
     public static Cart createCart(Customer customer){

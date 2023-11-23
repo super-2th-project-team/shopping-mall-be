@@ -2,6 +2,7 @@ package com.be01.prj2.entity.cart;
 
 
 import com.be01.prj2.entity.product.Product;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class CartProduct {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @JsonBackReference
     private Product productId;
 
     private String color;

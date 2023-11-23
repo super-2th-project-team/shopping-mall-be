@@ -2,6 +2,7 @@ package com.be01.prj2.web.controller.mypage;
 
 import com.be01.prj2.dto.cartDto.CartDto;
 import com.be01.prj2.dto.myPage.MyPageDto;
+import com.be01.prj2.dto.myPage.PurViewDto;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.service.myPage.MyPageService;
 import lombok.RequiredArgsConstructor;
@@ -42,11 +43,11 @@ public class MyPageController {
     }
 
     // 구매했던 물품 조회
-/*    @GetMapping("/me/view")
+    @GetMapping("/me/view")
     public List<PurViewDto> getViewProduct(@RequestHeader("access_token") String accessToken) {
         String email = tokenProvider.getEmailBytoken(accessToken);
         return myPageService.getViewProductByEmail(email);
-    }*/
+    }
 
     // 페이 조회
     @GetMapping("/me/pay")

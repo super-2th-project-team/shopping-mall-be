@@ -2,9 +2,11 @@ package com.be01.prj2.service.myPage;
 
 import com.be01.prj2.dto.cartDto.CartDto;
 import com.be01.prj2.dto.myPage.MyPageDto;
+import com.be01.prj2.dto.myPage.PurViewDto;
 import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.myPage.MyPageEntity;
+import com.be01.prj2.entity.order.Order;
 import com.be01.prj2.entity.pay.PayEntity;
 import com.be01.prj2.exception.myPage.ErrorMessage;
 import com.be01.prj2.exception.myPage.MyPageException;
@@ -12,6 +14,7 @@ import com.be01.prj2.repository.cartRepository.CartRepository;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
 import com.be01.prj2.repository.myPage.MyPageRepository;
 import com.be01.prj2.repository.myPage.PayRepository;
+import com.be01.prj2.repository.order.OrderRepository;
 import com.be01.prj2.role.CartStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,9 +30,9 @@ public class MyPageServiceImpl implements MyPageService {
 
     private final MyPageRepository myPageRepository;
     private final CartRepository cartRepository;
-//    private final PurViewRepository purViewRepository;
     private final PayRepository payRepository;
     private final CustomerRepository customerRepository;
+    private final OrderRepository orderRepository;
 
     @Override
     public MyPageDto getMyPageInfo(String email) {
@@ -86,24 +89,28 @@ public class MyPageServiceImpl implements MyPageService {
                 .collect(Collectors.toList());
     }
 
-/*    @Override
+    @Override
     public List<PurViewDto> getViewProductByEmail(String email) {
         // email로 MyPageEntity 객체 조회
         MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
         if (myPageEntity == null) {
-            throw new MyPageException("유저 정보를 찾을 수 없습니다. email을 확인해주세요.");
+            throw new MyPageException(ErrorMessage.USER_NOT_FOUND);
         }
         // Customer 객체의 userIdx로 구매했던 물품 조회
-        List<PurViewEntity> purViewEntityList = purViewRepository.findByUserIdx(myPageEntity.getMyPageUserId().getUserId());
+        List<Order> orders = orderRepository.findByUserId(myPageEntity.getMyPageUserId());
 
-        if (purViewEntityList.isEmpty()) {
-            throw new MyPageException("구매 이력을 찾을 수 없습니다. email을 확인해주세요.");
+        if (orders.isEmpty()) {
+            throw new MyPageException(ErrorMessage.ORDER_NOT_FOUND);
         }
 
-        return purViewEntityList.stream()
-                .map(entity -> new PurViewDto(entity.getProductName(), entity.getProductPrice(), entity.getProductImg(), entity.getOrderEnroll()))
+        return orders.stream()
+                .map(order -> new PurViewDto(order.getOrderId(), order.getProductId().getProductId(), order.getTotalPrice(), order.getOrderEnroll(), order.getAddressee(), order.getAddress(), order.getMobile(), order.getComment()))
+
+
                 .collect(Collectors.toList());
-    }*/
+
+
+    }
 
     @Override
     public int getPay(String email) {

@@ -2,6 +2,7 @@ package com.be01.prj2.entity.product;
 
 import com.be01.prj2.entity.cart.CartProduct;
 import com.be01.prj2.entity.customer.Customer;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -49,6 +50,7 @@ public class Product {
     private Customer sellerId;
 
     @OneToMany(mappedBy = "productId")
+    @JsonManagedReference
     private List<CartProduct> cartProducts; //장바구니에 담길 상품들
 
 

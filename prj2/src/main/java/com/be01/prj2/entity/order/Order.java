@@ -3,6 +3,7 @@ package com.be01.prj2.entity.order;
 import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.product.Product;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Order {
     private Long orderId;
 
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "cart_id")
     private Cart cartId;
 
