@@ -38,6 +38,7 @@ public class Customer implements UserDetails {
     private String address;
     private String profileImg;
     private Role role;
+    private int points;
 
     @OneToMany(mappedBy = "sellerId")
     private List<Product> products;
@@ -82,5 +83,11 @@ public class Customer implements UserDetails {
         return true;
     }
 
+    public int getPoints() {
+        return points;
+    }
 
+    public void setPoints(int points) {
+        this.points = points;
+    }
 }

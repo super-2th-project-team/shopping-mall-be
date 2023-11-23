@@ -122,6 +122,7 @@ public class TokenProvider {
 
         return claims.isEmpty() ? null : claims.get("role", String.class);
     }
+
 }
 
 

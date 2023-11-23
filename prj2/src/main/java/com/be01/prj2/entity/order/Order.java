@@ -34,4 +34,15 @@ public class Order {
 
     private String addressee; //수령인, 주소 ?
 
+    @Builder
+    public static Order createOrder(Cart cartId, Long totalPrice, String comment, Date orderEnroll, String address, String addressee, String mobile) {
+        Order order = new Order();
+        order.cartId = cartId;
+        order.totalPrice = totalPrice;
+        order.comment = comment;
+        order.orderEnroll = orderEnroll;
+        order.address = address;
+        order.addressee = addressee;
+        return order;
+    }
 }

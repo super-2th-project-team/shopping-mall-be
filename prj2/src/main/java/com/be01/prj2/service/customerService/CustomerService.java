@@ -171,5 +171,8 @@ public class CustomerService {
         }
     }
 
-
+    public Customer getCustomerByEmail(String email) {
+        return customerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("해당 이메일의 고객을 찾을 수 없습니다."));
+    }
 }
