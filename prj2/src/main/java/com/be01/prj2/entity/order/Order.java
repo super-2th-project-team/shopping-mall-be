@@ -30,8 +30,10 @@ public class Order {
 
     private String address;
 
+    @Column(name = "comment")
     private String comment;
 
+    @Column(name = "order_enroll")
     private Date orderEnroll;
 
     private String addressee; //수령인, 주소 ?

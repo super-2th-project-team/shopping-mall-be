@@ -38,25 +38,25 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
     org.springframework.security: DEBUG
-    level:
-      com:
-        amazonaws:
-          util:
-            EC2MetadataUtils: error
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
 
 
 cloud:
   aws:
     s3:
-      bucket: user-profile-prj2-supercoding
+      bucket: ${bucketName1}
     credentials:
-      access-key: AKIAZ6RPDHXFNB6EKUMZ
-      secret-key: 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
+      access-key: ${access}
+      secret-key: ${secretkey}
     region:
       static: ap-northeast-2
 
-    stack:
-      auto: false
+
+
+
 
 
 
