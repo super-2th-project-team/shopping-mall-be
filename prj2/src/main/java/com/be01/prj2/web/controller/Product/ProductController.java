@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import java.nio.file.AccessDeniedException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -64,11 +66,18 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    //상품 삭제
-    @DeleteMapping("/{productId}")
-    public ResponseEntity<String> deleteByProductId(@PathVariable Long productId) {
-        productService.deleteByProductId(productId);
-        return ResponseEntity.status(HttpStatus.CREATED).body("물품 삭제가 완료 되었습니다");
+    //토큰을 받아서 상품 삭제
+    @DeleteMapping("/delete/{productId}")
+    public ResponseEntity<?> deleteByProductId(@RequestHeader("access_token") String token,
+                                               @PathVariable Long productId) {
+        try {
+            productService.deleteByProductId(token, productId);
+            return ResponseEntity.status(HttpStatus.CREATED).body("물품이 삭제되었습니다.");
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 }

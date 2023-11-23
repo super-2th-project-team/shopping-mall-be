@@ -47,8 +47,8 @@ public class Product {
     @JoinColumn(name = "user_idx") //실제 컬럼명
     private Customer userId;
 
-    @OneToMany(mappedBy = "productId") // mappedBy 속성은 Product 엔터티에 있는 필드명을 나타냅니다.
-    private List<OrderProduct> orderProducts;
+//    @OneToMany(mappedBy = "productId") // mappedBy 속성은 Product 엔터티에 있는 필드명을 나타냅니다.
+//    private List<OrderProduct> orderProducts;
 
 
 

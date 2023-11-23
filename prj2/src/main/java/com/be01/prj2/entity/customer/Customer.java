@@ -1,6 +1,5 @@
 package com.be01.prj2.entity.customer;
 
-import com.be01.prj2.entity.product.OrderProduct;
 import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.role.Role;
 import lombok.*;
@@ -39,8 +38,8 @@ public class Customer implements UserDetails {
     @OneToMany(mappedBy = "userId")
     private List<Product> products;
 
-    @OneToMany(mappedBy = "customerId")
-    private List<OrderProduct> orderProducts;
+//    @OneToMany(mappedBy = "customerId")
+//    private List<OrderProduct> orderProducts;
 
 
     @Override

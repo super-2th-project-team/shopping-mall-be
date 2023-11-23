@@ -15,7 +15,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestHeader;
 
+import javax.persistence.EntityNotFoundException;
+import java.nio.file.AccessDeniedException;
 import java.util.*;
 
 @Service
@@ -86,8 +89,30 @@ public class ProductService {
     }
 
     //productId로 상품 삭제
-    public void deleteByProductId(Long productId) {
-        productRepository.deleteById(productId);
+    @Transactional
+    public void deleteByProductId(@RequestHeader("access_token")String token, Long productId) throws AccessDeniedException {
+        String email = tokenProvider.getEmailBytoken(token);
+        Optional<Customer> seller = customerRepository.findByEmail(email);
+
+        if (seller.isPresent()) {
+            Customer customer = seller.get();
+            Optional<Product> optionalProduct = productRepository.findById(productId);
+
+            if (optionalProduct.isPresent()) {
+                Product product = optionalProduct.get();
+
+                if (product.getUserId().equals(customer)) {
+
+                    productRepository.delete(product);
+                } else {
+                    throw new AccessDeniedException("해당 상품의 판매자가 아닙니다.");
+                }
+            } else {
+                throw new EntityNotFoundException("상품을 찾을 수 없습니다.");
+            }
+        } else {
+            throw new EntityNotFoundException("판매자를 찾을 수 없습니다.");
+        }
     }
 
 }
