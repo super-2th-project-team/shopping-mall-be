@@ -4,9 +4,11 @@ import com.be01.prj2.entity.product.ProductColor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ColorRepository extends JpaRepository<ProductColor, Long> {
 
     @Query("SELECT DISTINCT c.color FROM ProductColor c WHERE c.productId = :productId")

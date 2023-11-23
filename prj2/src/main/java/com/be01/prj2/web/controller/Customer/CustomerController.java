@@ -1,5 +1,11 @@
 package com.be01.prj2.web.controller.Customer;
 
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.be01.prj2.dto.customerDto.AddExtraInfoDto;
 import com.be01.prj2.dto.customerDto.LoginDto;
 
@@ -20,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URL;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +42,7 @@ public class CustomerController {
     private final TokenProvider tokenProvider;
     private final RedisTemplate<String , String > redisTemplate;
     private final S3Service s3Service;
+
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody SignupDto signupDto){
@@ -94,13 +102,14 @@ public class CustomerController {
 
     //프로필 이미지 업로드
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadProfile(@RequestHeader("access_token")String token,
+    public String  uploadProfile(@RequestHeader("access_token")String token,
                                            @RequestPart(value = "file")MultipartFile multipartFile) throws FileUploadFailedException {
 
         String email = tokenProvider.getEmailBytoken(token);
 
-        s3Service.uploadProfile(email, multipartFile);
-        return ResponseEntity.status(HttpStatus.CREATED).body("파일 업로드 성공했습니다");
+        return s3Service.uploadProfile(email, multipartFile);
     }
+
+
 
 }

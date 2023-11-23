@@ -6,6 +6,7 @@ import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
 import com.be01.prj2.repository.productRepository.ProductRepository;
+import com.be01.prj2.service.S3Service.S3Service;
 import com.be01.prj2.service.SellService.SellService;
 import com.be01.prj2.service.customerService.CustomerService;
 import com.be01.prj2.service.ProductService.ProductService;
@@ -16,7 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,6 +35,7 @@ public class ProductController {
     private final TokenProvider tokenProvider;
     private final CustomerRepository customerRepository;
     private final SellService sellService;
+    private final S3Service s3Service;
 
     //토큰을 받아서 상품 등록
     @PostMapping("/register")
@@ -47,7 +51,7 @@ public class ProductController {
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당하는 user가 없습니다");
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("물품 등록이 완료 되었습니다");
+        return ResponseEntity.status(HttpStatus.CREATED).body("물품 등록이 완료 되었습니다 물품 ID를 확인해 주세요");
     }
 
     //모든 상품 정보 조회
@@ -63,7 +67,8 @@ public class ProductController {
                     List<String> colorList = sellService.getProductColor(product.getProductId());
                     List<String> sizeList = sellService.getProductSize(product.getProductId());
                     Long userId = productService.findUserIdByProductId(product.getProductId());
-                    return SellDto.fromEntity(product, colorList, sizeList, userId);
+                    List<String> imgList = sellService.getProductImg(product.getProductId());
+                    return SellDto.fromEntity(product, colorList, sizeList, userId, imgList);
                 })
                 .collect(Collectors.toList());
     }
@@ -82,6 +87,11 @@ public class ProductController {
         }
     }
 
+    @PostMapping("/imgUpload")
+    private ResponseEntity<List<String >> productImgsUpload(@RequestParam("id")Long productId,
+                                            @RequestParam("files")List<MultipartFile> files) {
+        List<String> uploadUrls = s3Service.uploadProductImg(productId, files);
+        return ResponseEntity.ok().body(uploadUrls);
 
-
+    }
 }

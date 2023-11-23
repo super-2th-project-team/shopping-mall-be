@@ -1,25 +1,38 @@
 package com.be01.prj2.service.ProductService;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.EncryptedPutObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.be01.prj2.dto.productsDto.SellDto;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.product.Product;
 
+import com.be01.prj2.entity.product.ProductImg;
+import com.be01.prj2.exception.EmptyFileException;
+import com.be01.prj2.exception.FileUploadFailedException;
 import com.be01.prj2.jwt.TokenProvider;
 
 import com.be01.prj2.repository.productRepository.ColorRepository;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
+import com.be01.prj2.repository.productRepository.ImgRepository;
 import com.be01.prj2.repository.productRepository.ProductRepository;
 import com.be01.prj2.repository.productRepository.SizeRepository;
+import com.be01.prj2.service.S3Service.CommonUtils;
+import com.be01.prj2.service.S3Service.S3Service;
 import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.AccessDeniedException;
 import java.util.*;
 
@@ -34,6 +47,7 @@ public class ProductService {
     private final ColorRepository colorRepository;
     private final SizeRepository sizeRepository;
 
+    
     //판매 물품 등록
     @Transactional
     public Product productRegister(SellDto sellDto, Long userId) {
@@ -45,20 +59,21 @@ public class ProductService {
             List<String> size = Arrays.asList("S", "M", "L", "XL", "FREE");
 
             Product product = Product.builder()
+                    .productId(sellDto.getProductId())
                     .productName(sellDto.getProductName())
                     .productPrice(sellDto.getProductPrice())
                     .productInfo(sellDto.getProductInfo())
                     .productStock(sellDto.getProductStock())
                     .productSell(sellDto.getProductSell())
                     .productEnroll(sellDto.getProductEnroll())
-                    .productImg(sellDto.getProductImg())
                     .category(sellDto.getCategory())
                     .subCategory(sellDto.getSubCategory())
-                    .color(color.subList(0, 4))
+                    .color(color.subList(0, 7))
                     .size(size.subList(0, 5))
                     .sellerId(customer)
                     .build();
             return productRepository.save(product);
+
         } else {
             return null;
         }

@@ -24,7 +24,7 @@ public class SellDto {
     private Integer productStock;
     private Integer productSell;
     private Date productEnroll;
-    private String productImg;
+    private List<String> productImg;
     private String category;
     private String subCategory;
     private List<String> color;
@@ -47,7 +47,7 @@ public class SellDto {
 //    }
 
 
-    public static SellDto fromEntity(Product product, List<String> color, List<String> size, Long userId){
+    public static SellDto fromEntity(Product product, List<String> color, List<String> size, Long userId, List<String> img){
         return SellDto.builder()
                 .sellerId(userId)
                 .productId(product.getProductId())
@@ -57,11 +57,11 @@ public class SellDto {
                 .productStock(product.getProductStock())
                 .productSell(product.getProductSell())
                 .productEnroll(product.getProductEnroll())
-                .productImg(product.getProductImg())
                 .category(product.getCategory())
                 .subCategory(product.getSubCategory())
                 .color(color)
                 .size(size)
+                .productImg(img)
                 .build();
     }
 }
