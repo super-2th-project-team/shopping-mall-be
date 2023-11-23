@@ -49,13 +49,13 @@ cloud:
   aws:
     s3:
       bucket: user-profile-prj2
+    credentials:
       access-key: ${access-key}
       secret-key: ${secret-key}
     region:
       static: ap-northeast-2
 
-    stack:
-      auto: false
+
 
 
 
