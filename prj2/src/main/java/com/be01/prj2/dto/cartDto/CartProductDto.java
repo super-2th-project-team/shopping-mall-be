@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class CartProductDto {
-
+    private Long cartProductIdx;
     private Long cartId;
     private Long productId;
     private int Quantity;

@@ -79,7 +79,7 @@ public class CartController {
 
     }
 
-    @PostMapping("/update/{cartProductIdx}")
+    @PutMapping("/update/{cartProductIdx}")
     public CartProductDto update(@PathVariable("cartProductIdx") Long cartProductIdx,
                                  @RequestBody CartProductUpdateDto cartProductUpdateDto){
 

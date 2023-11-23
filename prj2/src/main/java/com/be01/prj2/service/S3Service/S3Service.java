@@ -43,7 +43,7 @@ public class S3Service {
         }
     }
 
-
+    //유저 프로필 업데이트
     public String uploadProfile(String email, MultipartFile multipartFile) throws FileUploadFailedException {
         validateFileExists(multipartFile);
 
@@ -71,7 +71,7 @@ public class S3Service {
 
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
-
+    //물품 사진 다중 업로드
     public List<String> uploadProductImg(Long productId, List<MultipartFile> multipartFileList){
 
         List<String> filenameList = new ArrayList<>();
@@ -87,7 +87,7 @@ public class S3Service {
 
         return filenameList;
     }
-
+    //물품 사진 다중 업로드
     public String uploadProductImgSingle(Long productId, MultipartFile multipartFile) throws FileUploadFailedException {
         validateFileExists(multipartFile);
         String randomString = UUID.randomUUID().toString().substring(0, 8);
