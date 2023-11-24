@@ -12,10 +12,9 @@ public class CommonUtils {
         return email + "/" + email;
     }
 
-    public static String buildProductName(Long productId, String originalFileName){
-        int fileExtensionIndex = originalFileName.lastIndexOf(".");
-        String productIdx = productId.toString();
+    public static String buildProductName(String productName, String originalFileName){
+
         String randomString = UUID.randomUUID().toString().substring(0, 8);
-        return "Product :"+ productIdx + "/" + productIdx + randomString;
+        return "Product :"+ productName + "/" + productName + randomString;
     }
 }

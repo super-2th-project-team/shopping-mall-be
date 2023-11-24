@@ -12,6 +12,7 @@ import com.be01.prj2.exception.FileUploadFailedException;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
 import com.be01.prj2.repository.productRepository.ImgRepository;
+import com.be01.prj2.repository.productRepository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,7 @@ public class S3Service {
     private final TokenProvider tokenProvider;
     private final CustomerRepository customerRepository;
     private final ImgRepository imgRepository;
+    private final ProductRepository productRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -91,14 +93,16 @@ public class S3Service {
     public String uploadProductImgSingle(Long productId, MultipartFile multipartFile) throws FileUploadFailedException {
         validateFileExists(multipartFile);
         String randomString = UUID.randomUUID().toString().substring(0, 8);
-        String fileName = CommonUtils.buildProductName(productId, randomString + "_" + Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        String productName = productRepository.findByProductId(productId).getProductName();
+
+        String fileName = CommonUtils.buildProductName(productName, randomString + "_" + Objects.requireNonNull(multipartFile.getOriginalFilename()));
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         objectMetadata.setContentLength(multipartFile.getSize());
 
         try(InputStream inputStream = multipartFile.getInputStream()){
-            amazonS3Client.putObject(new EncryptedPutObjectRequest(bucketName, fileName, inputStream, objectMetadata));
+            amazonS3Client.putObject(new EncryptedPutObjectRequest(bucketName, fileName, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
 
 
         }catch (Exception e){

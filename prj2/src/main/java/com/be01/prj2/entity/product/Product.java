@@ -25,11 +25,12 @@ public class Product {
     private String productName;
 
     private int productPrice;
+    private int originPrice;
     private String productInfo;
     private Integer productStock;
     private Integer productSell;
     private Date productEnroll;
-
+    private Integer discount;
     private String category;
     private String subCategory;
 
@@ -37,13 +38,6 @@ public class Product {
     @CollectionTable(name = "product_color", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "color")
     private List<String > color;
-
-
-//    @ElementCollection
-//    @CollectionTable(name = "product_img", joinColumns = @JoinColumn(name = "product_id"))
-//    @Column(name = "img")
-//    private List<String > img;
-
 
     @ElementCollection
     @CollectionTable(name = "product_size", joinColumns = @JoinColumn(name = "product_id"))

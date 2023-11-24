@@ -25,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -60,14 +62,16 @@ public class ProductService {
 
             Product product = Product.builder()
                     .productId(sellDto.getProductId())
-                    .productName(sellDto.getProductName())
-                    .productPrice(sellDto.getProductPrice())
-                    .productInfo(sellDto.getProductInfo())
-                    .productStock(sellDto.getProductStock())
-                    .productSell(sellDto.getProductSell())
-                    .productEnroll(sellDto.getProductEnroll())
+                    .productName(sellDto.getName())
+                    .productPrice(sellDto.getPrice())
+                    .originPrice(sellDto.getPrice())
+                    .productInfo(sellDto.getDescription())
+                    .productStock(sellDto.getStock())
+                    .productSell(0)
+                    .productEnroll(sellDto.getEnroll())
                     .category(sellDto.getCategory())
                     .subCategory(sellDto.getSubCategory())
+                    .discount(0)
                     .color(color.subList(0, 7))
                     .size(size.subList(0, 5))
                     .sellerId(customer)
@@ -133,6 +137,35 @@ public class ProductService {
         } else {
             throw new EntityNotFoundException("판매자를 찾을 수 없습니다.");
         }
+    }
+
+    @Transactional
+    public ResponseEntity<String> discount(String token, Long productId, Integer discount){
+
+        String email = tokenProvider.getEmailBytoken(token);
+        Optional<Customer> isCustomer = customerRepository.findByEmail(email);
+
+        if(isCustomer.isPresent()){
+            Customer seller = isCustomer.get();
+            Product product = productRepository.findByProductId(productId);
+            if(product.getSellerId().equals(seller)){
+
+                int originPrice = product.getOriginPrice();
+                product.setProductPrice(originPrice);
+
+                product.setDiscount(discount);
+                double newPrice = originPrice - (originPrice * (discount * 0.01));
+                product.setProductPrice((int)newPrice);
+                productRepository.save(product);
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body("할인율이 적용되었습니다 현재 가격 :" + product.getProductPrice());
+
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("판매자가 아니닙니다");
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("상품이 없습니다");
+        }
+
     }
 
 

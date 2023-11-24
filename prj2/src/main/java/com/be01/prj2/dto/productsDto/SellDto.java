@@ -18,13 +18,15 @@ public class SellDto {
 
     private Long sellerId;
     private Long productId;
-    private String productName;
-    private int productPrice;
-    private String productInfo;
-    private Integer productStock;
+    private String name;
+    private int originPrice;
+    private int price;
+    private String description;
+    private Integer stock;
     private Integer productSell;
-    private Date productEnroll;
+    private Date enroll;
     private List<String> productImg;
+    private Integer discount;
     private String category;
     private String subCategory;
     private List<String> color;
@@ -32,31 +34,18 @@ public class SellDto {
 
 
 
-//    public static SellDto fromEntity(Product product, List<String> color, List<String> size){
-//        SellDto sellDto = new SellDto();
-//        sellDto.setProductName(product.getProductName());
-//        sellDto.setProductPrice(product.getProductPrice());
-//        sellDto.setProductInfo(product.getProductInfo());
-//        sellDto.setProductStock(product.getProductStock());
-//        sellDto.setProductSell(product.getProductSell());
-//        sellDto.setProductImg(product.getProductImg());
-//        sellDto.setCategory(product.getCategory());
-//        sellDto.setSubCategory(product.getSubCategory());
-//
-//
-//    }
-
-
     public static SellDto fromEntity(Product product, List<String> color, List<String> size, Long userId, List<String> img){
         return SellDto.builder()
                 .sellerId(userId)
                 .productId(product.getProductId())
-                .productName(product.getProductName())
-                .productPrice(product.getProductPrice())
-                .productInfo(product.getProductInfo())
-                .productStock(product.getProductStock())
+                .name(product.getProductName())
+                .price(product.getProductPrice())
+                .originPrice(product.getProductPrice())
+                .description(product.getProductInfo())
+                .stock(product.getProductStock())
                 .productSell(product.getProductSell())
-                .productEnroll(product.getProductEnroll())
+                .enroll(product.getProductEnroll())
+                .discount(0)
                 .category(product.getCategory())
                 .subCategory(product.getSubCategory())
                 .color(color)

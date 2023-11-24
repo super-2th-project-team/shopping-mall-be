@@ -88,10 +88,19 @@ public class ProductController {
     }
 
     @PostMapping("/imgUpload")
-    private ResponseEntity<List<String >> productImgsUpload(@RequestParam("id")Long productId,
+    public ResponseEntity<List<String >> productImgsUpload(@RequestParam("id")Long productId,
                                             @RequestParam("files")List<MultipartFile> files) {
         List<String> uploadUrls = s3Service.uploadProductImg(productId, files);
         return ResponseEntity.ok().body(uploadUrls);
 
+    }
+
+    @PostMapping("/discount/{productId}")
+    public ResponseEntity<String> discount(@RequestHeader("access_token") String token,
+                                           @PathVariable Long productId,
+                                           @RequestBody Map<String, Integer> requestBody){
+
+        Integer discount = requestBody.get("discount");
+        return  productService.discount(token,productId,discount);
     }
 }
