@@ -83,7 +83,7 @@ public class CustomerService {
         payEntity.setBalance(0);
         payRepository.save(payEntity);
 
-        customer.setPayEntity(payEntity);
+//        customer.setPayEntity(payEntity);
         customerRepository.save(customer);
 
         // MyPageEntity 생성 및 저장
