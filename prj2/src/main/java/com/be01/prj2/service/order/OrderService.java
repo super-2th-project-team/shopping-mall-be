@@ -48,6 +48,8 @@ public class OrderService {
         }
 
         Customer customer = customerOptional.get();  // Customer 객체를 가져옴
+        customer.setPoints(0);
+        customerRepository.save(customer);
 
         Product product = productRepository.findByProductId(productId);
         if (product == null) {
@@ -70,6 +72,10 @@ public class OrderService {
         cart.setStatus(CartStatus.PAY.getName());
         cartRepository.save(cart);
 //        cartRepository.delete(cart);
+
+/*        // 새 카트 생성
+        Cart newCart = Cart.createCart(customer);
+        cartRepository.save(newCart);*/
 
         return orderRepository.save(order);
     }

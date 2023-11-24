@@ -61,6 +61,10 @@ public class Customer implements UserDetails {
     @OneToOne(mappedBy = "myPageUserId")
     private MyPageEntity mypage;
 
+    @Column(name = "points")
+    private int points;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
