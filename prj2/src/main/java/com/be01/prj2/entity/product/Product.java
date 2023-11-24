@@ -26,11 +26,12 @@ public class Product {
     private String productName;
 
     private int productPrice;
+    private Integer originPrice;
     private String productInfo;
     private Integer productStock;
     private Integer productSell;
     private Date productEnroll;
-    private String productImg;
+    private Integer discount;
     private String category;
     private String subCategory;
 
@@ -39,14 +40,13 @@ public class Product {
     @Column(name = "color")
     private List<String > color;
 
-
     @ElementCollection
     @CollectionTable(name = "product_size", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "size")
     private List<String> size;
 
     @ManyToOne
-    @JoinColumn(name = "seller_idx") //자기 테이블의 실제 컬럼명
+    @JoinColumn(name = "user_idx") //자기 테이블의 실제 컬럼명
     private Customer sellerId;
 
     @OneToMany(mappedBy = "productId")

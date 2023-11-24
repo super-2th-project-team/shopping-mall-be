@@ -1,13 +1,11 @@
 package com.be01.prj2.entity.customer;
 
 import com.be01.prj2.entity.cart.Cart;
-import com.be01.prj2.entity.myPage.MyPageEntity;
-import com.be01.prj2.entity.pay.PayEntity;
+import com.be01.prj2.entity.mypage.Mypage;
+import com.be01.prj2.entity.order.Order;
 import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.role.Role;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,10 +22,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "userId")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "customer")
 public class Customer implements UserDetails {
 
@@ -48,21 +42,12 @@ public class Customer implements UserDetails {
     @OneToMany(mappedBy = "sellerId")
     private List<Product> products;
 
-    @OneToOne
-    @JoinColumns({
-            @JoinColumn(name="pay_entity_user_idx", referencedColumnName="user_idx"),
-            @JoinColumn(name="pay_entity_pay_idx", referencedColumnName="pay_idx")
-    })
-    private PayEntity payEntity;
-
     @OneToOne(mappedBy = "userIdx")
+    @JsonManagedReference
     private Cart cart;
 
     @OneToOne(mappedBy = "myPageUserId")
-    private MyPageEntity mypage;
-
-    @Column(name = "points")
-    private int points;
+    private Mypage mypage;
 
 
     @Override

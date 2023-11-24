@@ -7,6 +7,10 @@ spring:
   redis:
     host: localhost
     port: 6379
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
 
   jpa:
     show-sql: true
@@ -34,3 +38,24 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
     org.springframework.security: DEBUG
+    level:
+      com:
+        amazonaws:
+          util:
+            EC2MetadataUtils: error
+
+
+cloud:
+  aws:
+    s3:
+      bucket: user-profile-prj2
+    credentials:
+      access-key: ${access-key}
+      secret-key: ${secret-key}
+    region:
+      static: ap-northeast-2
+
+
+
+
+

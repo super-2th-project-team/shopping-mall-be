@@ -1,25 +1,40 @@
 package com.be01.prj2.service.ProductService;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.EncryptedPutObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.be01.prj2.dto.productsDto.SellDto;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.product.Product;
 
+import com.be01.prj2.entity.product.ProductImg;
+import com.be01.prj2.exception.EmptyFileException;
+import com.be01.prj2.exception.FileUploadFailedException;
 import com.be01.prj2.jwt.TokenProvider;
 
 import com.be01.prj2.repository.productRepository.ColorRepository;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
+import com.be01.prj2.repository.productRepository.ImgRepository;
 import com.be01.prj2.repository.productRepository.ProductRepository;
 import com.be01.prj2.repository.productRepository.SizeRepository;
+import com.be01.prj2.service.S3Service.CommonUtils;
+import com.be01.prj2.service.S3Service.S3Service;
 import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.AccessDeniedException;
 import java.util.*;
 
@@ -34,6 +49,7 @@ public class ProductService {
     private final ColorRepository colorRepository;
     private final SizeRepository sizeRepository;
 
+    
     //판매 물품 등록
     @Transactional
     public Product productRegister(SellDto sellDto, Long userId) {
@@ -45,20 +61,23 @@ public class ProductService {
             List<String> size = Arrays.asList("S", "M", "L", "XL", "FREE");
 
             Product product = Product.builder()
-                    .productName(sellDto.getProductName())
-                    .productPrice(sellDto.getProductPrice())
-                    .productInfo(sellDto.getProductInfo())
-                    .productStock(sellDto.getProductStock())
-                    .productSell(sellDto.getProductSell())
-                    .productEnroll(sellDto.getProductEnroll())
-                    .productImg(sellDto.getProductImg())
+                    .productId(sellDto.getProductId())
+                    .productName(sellDto.getName())
+                    .productPrice(sellDto.getPrice())
+                    .originPrice(sellDto.getPrice())
+                    .productInfo(sellDto.getDescription())
+                    .productStock(sellDto.getStock())
+                    .productSell(0)
+                    .productEnroll(sellDto.getEnroll())
                     .category(sellDto.getCategory())
                     .subCategory(sellDto.getSubCategory())
-                    .color(color.subList(0, 4))
+                    .discount(0)
+                    .color(color.subList(0, 7))
                     .size(size.subList(0, 5))
                     .sellerId(customer)
                     .build();
             return productRepository.save(product);
+
         } else {
             return null;
         }
@@ -118,6 +137,35 @@ public class ProductService {
         } else {
             throw new EntityNotFoundException("판매자를 찾을 수 없습니다.");
         }
+    }
+
+    @Transactional
+    public ResponseEntity<String> discount(String token, Long productId, Integer discount){
+
+        String email = tokenProvider.getEmailBytoken(token);
+        Optional<Customer> isCustomer = customerRepository.findByEmail(email);
+
+        if(isCustomer.isPresent()){
+            Customer seller = isCustomer.get();
+            Product product = productRepository.findByProductId(productId);
+            if(product.getSellerId().equals(seller)){
+
+                int originPrice = product.getOriginPrice();
+                product.setProductPrice(originPrice);
+
+                product.setDiscount(discount);
+                double newPrice = originPrice - (originPrice * (discount * 0.01));
+                product.setProductPrice((int)newPrice);
+                productRepository.save(product);
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body("할인율이 적용되었습니다 현재 가격 :" + product.getProductPrice());
+
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("판매자가 아니닙니다");
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("상품이 없습니다");
+        }
+
     }
 
 

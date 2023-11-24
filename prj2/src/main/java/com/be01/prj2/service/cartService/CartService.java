@@ -87,6 +87,7 @@ public class CartService {
     //DTO 로 변환
     public CartProductDto convertToDto(CartProduct cartProduct) {
         return CartProductDto.builder()
+                .cartProductIdx(cartProduct.getCartProductIdx())
                 .cartId(cartProduct.getCartId().getCartId())
                 .productId(cartProduct.getProductId().getProductId())
                 .Quantity(cartProduct.getCartQuantity())
@@ -101,11 +102,17 @@ public class CartService {
         CartProduct myCart = cartProductRepository
                 .findByCartProductIdx(cartProductIdx);
 
-
         myCart.setCartQuantity(cartProductUpdateDto.getCartQuantity());
         myCart.setColor(cartProductUpdateDto.getColor());
         myCart.setSize(cartProductUpdateDto.getSize());
         cartProductRepository.save(myCart);
+
+        Cart cart = cartRepository.findByCartId(myCart.getCartId().getCartId());
+
+        updateCartTotal(cart, myCart);
+        cartRepository.save(cart);
+        cartProductRepository.save(myCart);
+
         return convertToDto(myCart);
 
     }
