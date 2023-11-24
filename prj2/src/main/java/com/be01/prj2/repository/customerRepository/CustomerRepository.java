@@ -1,4 +1,4 @@
-package com.be01.prj2.repository;
+package com.be01.prj2.repository.customerRepository;
 
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.role.Role;

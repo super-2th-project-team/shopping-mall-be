@@ -1,6 +1,5 @@
 package com.be01.prj2.dto.productsDto;
 
-import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.product.Product;
 import lombok.*;
 
@@ -16,15 +15,17 @@ import java.util.List;
 public class SellDto {
 
 
-    private Long userId;
+    private Long sellerId;
     private Long productId;
-    private String productName;
-    private Integer productPrice;
-    private String productInfo;
-    private Integer productStock;
+    private String name;
+    private Integer originPrice;
+    private Integer price;
+    private String description;
+    private Integer stock;
     private Integer productSell;
-    private Date productEnroll;
-    private String productImg;
+    private Date enroll;
+    private List<String> productImg;
+    private Integer discount;
     private String category;
     private String subCategory;
     private List<String> color;
@@ -32,36 +33,24 @@ public class SellDto {
 
 
 
-//    public static SellDto fromEntity(Product product, List<String> color, List<String> size){
-//        SellDto sellDto = new SellDto();
-//        sellDto.setProductName(product.getProductName());
-//        sellDto.setProductPrice(product.getProductPrice());
-//        sellDto.setProductInfo(product.getProductInfo());
-//        sellDto.setProductStock(product.getProductStock());
-//        sellDto.setProductSell(product.getProductSell());
-//        sellDto.setProductImg(product.getProductImg());
-//        sellDto.setCategory(product.getCategory());
-//        sellDto.setSubCategory(product.getSubCategory());
-//
-//
-//    }
-
-
-    public static SellDto fromEntity(Product product, List<String> color, List<String> size, Long userId){
+    public static SellDto fromEntity(Product product, List<String> color, List<String> size, Long userId, List<String> img){
         return SellDto.builder()
-                .userId(userId)
+                .sellerId(userId)
                 .productId(product.getProductId())
-                .productName(product.getProductName())
-                .productPrice(product.getProductPrice())
-                .productInfo(product.getProductInfo())
-                .productStock(product.getProductStock())
+                .name(product.getProductName())
+                .price(product.getProductPrice())
+                .originPrice(product.getOriginPrice() != null ? product.getOriginPrice():product.getProductPrice())
+                .description(product.getProductInfo())
+                .stock(product.getProductStock())
                 .productSell(product.getProductSell())
-                .productEnroll(product.getProductEnroll())
-                .productImg(product.getProductImg())
+                .enroll(product.getProductEnroll())
+                .discount(product.getDiscount() != null ? product.getDiscount() : 0)
                 .category(product.getCategory())
                 .subCategory(product.getSubCategory())
                 .color(color)
                 .size(size)
+                .productImg(img)
                 .build();
     }
+
 }

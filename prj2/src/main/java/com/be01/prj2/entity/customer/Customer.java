@@ -35,11 +35,15 @@ public class Customer implements UserDetails {
     private String profileImg;
     private Role role;
 
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "sellerId")
     private List<Product> products;
 
-//    @OneToMany(mappedBy = "customerId")
-//    private List<OrderProduct> orderProducts;
+//    @OneToOne(mappedBy = "userIdx")
+//    @JsonManagedReference
+//    private Cart cart;
+//
+//    @OneToOne(mappedBy = "myPageUserId")
+//    private Mypage mypage;
 
 
     @Override

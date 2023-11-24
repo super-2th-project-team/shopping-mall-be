@@ -24,11 +24,12 @@ public class Product {
     private String productName;
 
     private Integer productPrice;
+    private Integer originPrice;
     private String productInfo;
     private Integer productStock;
     private Integer productSell;
     private Date productEnroll;
-    private String productImg;
+    private Integer discount;
     private String category;
     private String subCategory;
 
@@ -45,10 +46,10 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "user_idx") //실제 컬럼명
-    private Customer userId;
+    private Customer sellerId;
 
-//    @OneToMany(mappedBy = "productId") // mappedBy 속성은 Product 엔터티에 있는 필드명을 나타냅니다.
-//    private List<OrderProduct> orderProducts;
+//    @OneToMany(mappedBy = "productId")
+//    private List<CartProduct> cartProducts; //장바구니에 담길 상품들
 
 
 

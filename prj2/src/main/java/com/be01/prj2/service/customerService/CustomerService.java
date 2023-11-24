@@ -1,12 +1,12 @@
 package com.be01.prj2.service.customerService;
 
-import com.be01.prj2.dto.AddExtraInfoDto;
-import com.be01.prj2.dto.LoginDto;
-import com.be01.prj2.dto.SignupDto;
+import com.be01.prj2.dto.customerDto.AddExtraInfoDto;
+import com.be01.prj2.dto.customerDto.LoginDto;
+import com.be01.prj2.dto.customerDto.SignupDto;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.exception.NotFoundException;
 import com.be01.prj2.jwt.TokenProvider;
-import com.be01.prj2.repository.CustomerRepository;
+import com.be01.prj2.repository.customerRepository.CustomerRepository;
 import com.be01.prj2.repository.SignOutRepository;
 import com.be01.prj2.role.Role;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,6 @@ import java.util.Optional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final SignOutRepository signOutRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
@@ -91,6 +90,20 @@ public class CustomerService {
             if (redisTemplate.opsForValue().get("logout : " + loginDto.getEmail()) != null) {
                 redisTemplate.delete("logout: " + loginDto.getEmail());
             }
+            try {
+                Optional<Customer> isSignout = customerRepository.findByEmail(email);
+                if(isSignout.isPresent()){
+                    Customer signOut = isSignout.get();
+                    if(signOut.getRole().equals(Role.SIGNOUT)){
+                        return "회원이 없습니다";
+                    }
+                }else{
+                    return "회원이 없습니다";
+                }
+            }catch (Exception e){
+                throw new NotFoundException("회원이 없습니다");
+            }
+
             return tokenProvider.createAccessToken(email);
 
         } catch (Exception e) {
@@ -98,6 +111,7 @@ public class CustomerService {
             throw new BadCredentialsException("잘못된 자격 증명 입니다.");
         }
     }
+
     //리프레쉬로 access 토큰 재발급
     @Transactional
     public String createAccessTokenByRefresh(String email) {

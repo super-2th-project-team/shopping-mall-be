@@ -1,4 +1,4 @@
-package com.be01.prj2.dto;
+package com.be01.prj2.dto.customerDto;
 
 import com.be01.prj2.entity.customer.Customer;
 import lombok.*;

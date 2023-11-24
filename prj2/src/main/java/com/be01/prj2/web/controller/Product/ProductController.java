@@ -4,17 +4,19 @@ import com.be01.prj2.dto.productsDto.SellDto;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.jwt.TokenProvider;
-import com.be01.prj2.repository.CustomerRepository;
-import com.be01.prj2.repository.ProductRepository;
+import com.be01.prj2.repository.customerRepository.CustomerRepository;
+import com.be01.prj2.repository.productRepository.ProductRepository;
 import com.be01.prj2.service.SellService.SellService;
 import com.be01.prj2.service.customerService.CustomerService;
 import com.be01.prj2.service.ProductService.ProductService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.nio.file.AccessDeniedException;
@@ -53,15 +55,17 @@ public class ProductController {
 
     //모든 상품 정보 조회
     @GetMapping("/getAll")
-    public List<SellDto> getAll(){
-        List<Product> productEntity = productService.findAll();
+    public List<SellDto> getAll(Pageable pageable){
+        Page<Product> productPage = productService.findAll(pageable);
+        List<Product> productEntity = productPage.getContent();
 
         return productEntity.stream()
                 .map(product -> {
                     List<String> colorList = sellService.getProductColor(product.getProductId());
                     List<String> sizeList = sellService.getProductSize(product.getProductId());
                     Long userId = productService.findUserIdByProductId(product.getProductId());
-                    return SellDto.fromEntity(product, colorList, sizeList, userId);
+                    List<String> imgList = sellService.getProductImg(product.getProductId());
+                    return SellDto.fromEntity(product, colorList, sizeList, userId, imgList);
                 })
                 .collect(Collectors.toList());
     }
@@ -78,6 +82,21 @@ public class ProductController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+//    @PostMapping("/imgUpload")
+//    public ResponseEntity<List<String>> productImgsUpload(@RequestParam("id")Long productId,
+//                                                          @RequestParam("files")List<MultipartFile> files) {
+//        List<String> uploadUrls = s3Service.uploadProductImg(productId, files);
+//        return ResponseEntity.ok().body(uploadUrls);
+//    }
+
+    @PostMapping("/discount/{productId}")
+    public ResponseEntity<String> discount(@RequestHeader("access_token") String token,
+                                           @PathVariable Long productId,
+                                           @RequestBody Map<String, Integer> requestBody) {
+        Integer discount = requestBody.get("discount");
+        return productService.discount(token,productId,discount);
     }
 
 }

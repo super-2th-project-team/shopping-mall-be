@@ -1,12 +1,13 @@
 package com.be01.prj2.web.controller.Customer;
 
-import com.be01.prj2.dto.AddExtraInfoDto;
-import com.be01.prj2.dto.LoginDto;
+import com.be01.prj2.dto.customerDto.AddExtraInfoDto;
+import com.be01.prj2.dto.customerDto.LoginDto;
 
-import com.be01.prj2.dto.SignupDto;
+import com.be01.prj2.dto.customerDto.SignupDto;
 import com.be01.prj2.entity.customer.Customer;
+import com.be01.prj2.exception.FileUploadFailedException;
 import com.be01.prj2.jwt.TokenProvider;
-import com.be01.prj2.repository.CustomerRepository;
+import com.be01.prj2.repository.customerRepository.CustomerRepository;
 import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -70,22 +72,31 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK.value()).body("토큰이 재발급 되었습니다");
     }
     @PostMapping("/logout")
-    public ResponseEntity<?>  logout(@RequestHeader("AccessToken")String accessToken){
+    public ResponseEntity<?>  logout(@RequestHeader("access_token")String accessToken){
         customerService.logout(accessToken);
         return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
     }
 
     @PostMapping("/signout")
     public ResponseEntity<?> signout(@RequestBody Customer signOutDto){
-
         customerService.signOut(signOutDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("회원 탈퇴가 완료되었습니다. 이용해주셔서 감사합니다");
     }
 
     @PostMapping("/addInfo")
-    private ResponseEntity<?> addInfo(@RequestHeader("AccessToken")String token ,@RequestBody AddExtraInfoDto addExtraInfoDto){
+    private ResponseEntity<?> addInfo(@RequestHeader("access_token")String token, @RequestBody AddExtraInfoDto addExtraInfoDto){
         customerService.addExtraInfo(token, addExtraInfoDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("저장 되었습니다!");
     }
+
+//    //프로필 이미지 업로드
+//    @PostMapping("/upload")
+//    public String  uploadProfile(@RequestHeader("access_token")String token,
+//                                 @RequestPart(value = "file") MultipartFile multipartFile) throws FileUploadFailedException {
+//
+//        String email = tokenProvider.getEmailBytoken(token);
+//
+//        return s3Service.uploadProfile(email, multipartFile);
+//    }
 
 }

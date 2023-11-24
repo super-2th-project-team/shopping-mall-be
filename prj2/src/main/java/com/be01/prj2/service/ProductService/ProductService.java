@@ -6,13 +6,17 @@ import com.be01.prj2.entity.product.Product;
 
 import com.be01.prj2.jwt.TokenProvider;
 
-import com.be01.prj2.repository.ColorRepository;
-import com.be01.prj2.repository.CustomerRepository;
-import com.be01.prj2.repository.ProductRepository;
-import com.be01.prj2.repository.SizeRepository;
+import com.be01.prj2.repository.productRepository.ColorRepository;
+import com.be01.prj2.repository.customerRepository.CustomerRepository;
+import com.be01.prj2.repository.productRepository.ProductRepository;
+import com.be01.prj2.repository.productRepository.SizeRepository;
 import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -39,22 +43,24 @@ public class ProductService {
 
         if (isSeller.isPresent()) {
             Customer customer = isSeller.get();
-            List<String> color = Arrays.asList("red", "blue", "green", "beige");
-            List<String> size = Arrays.asList("s", "m", "L", "XL", "FREE");
+            List<String> color = Arrays.asList("brown", "black", "beige", "white", "ivory", "navy", "gray");
+            List<String> size = Arrays.asList("S", "M", "L", "XL", "FREE");
 
             Product product = Product.builder()
-                    .productName(sellDto.getProductName())
-                    .productPrice(sellDto.getProductPrice())
-                    .productInfo(sellDto.getProductInfo())
-                    .productStock(sellDto.getProductStock())
-                    .productSell(sellDto.getProductSell())
-                    .productEnroll(sellDto.getProductEnroll())
-                    .productImg(sellDto.getProductImg())
+                    .productId(sellDto.getProductId())
+                    .productName(sellDto.getName())
+                    .productPrice(sellDto.getPrice())
+                    .originPrice(sellDto.getPrice())
+                    .productInfo(sellDto.getDescription())
+                    .productStock(sellDto.getStock())
+                    .productSell(0)
+                    .productEnroll(sellDto.getEnroll())
                     .category(sellDto.getCategory())
                     .subCategory(sellDto.getSubCategory())
-                    .color(color.subList(0, 4))
+                    .discount(0)
+                    .color(color.subList(0, 7))
                     .size(size.subList(0, 5))
-                    .userId(customer)
+                    .sellerId(customer)
                     .build();
             return productRepository.save(product);
         } else {
@@ -63,7 +69,9 @@ public class ProductService {
     }
 
     //DB에 있는 모든 물품 조회
-    public List<Product> findAll(){return productRepository.findAll();}
+    public Page<Product> findAll(Pageable pageable){
+        return productRepository.findAll(pageable);
+    }
 
     @Transactional
     public Map<String, List<String>> getProductDetails(Long productId) {
@@ -81,8 +89,8 @@ public class ProductService {
     //productId로 userId를 가지고 오는 로직
     public Long findUserIdByProductId(Long productId) {
         Product product = productRepository.findById(productId).orElse(null);
-        if (product != null && product.getUserId() != null) {
-            return product.getUserId().getUserId();
+        if (product != null && product.getSellerId() != null) {
+            return product.getSellerId().getUserId();
         } else {
             return null;
         }
@@ -101,7 +109,7 @@ public class ProductService {
             if (optionalProduct.isPresent()) {
                 Product product = optionalProduct.get();
 
-                if (product.getUserId().equals(customer)) {
+                if (product.getSellerId().equals(customer)) {
 
                     productRepository.delete(product);
                 } else {
@@ -113,6 +121,35 @@ public class ProductService {
         } else {
             throw new EntityNotFoundException("판매자를 찾을 수 없습니다.");
         }
+    }
+
+    @Transactional
+    public ResponseEntity<String> discount(String token, Long productId, Integer discount){
+
+        String email = tokenProvider.getEmailBytoken(token);
+        Optional<Customer> isCustomer = customerRepository.findByEmail(email);
+
+        if(isCustomer.isPresent()){
+            Customer seller = isCustomer.get();
+            Product product = productRepository.findByProductId(productId);
+            if(product.getSellerId().equals(seller)){
+
+                int originPrice = product.getOriginPrice();
+                product.setProductPrice(originPrice);
+
+                product.setDiscount(discount);
+                double newPrice = originPrice - (originPrice * (discount * 0.01));
+                product.setProductPrice((int)newPrice);
+                productRepository.save(product);
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body("할인율이 적용되었습니다 현재 가격 :" + product.getProductPrice());
+
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("판매자가 아닙니다");
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("상품이 없습니다");
+        }
+
     }
 
 }
