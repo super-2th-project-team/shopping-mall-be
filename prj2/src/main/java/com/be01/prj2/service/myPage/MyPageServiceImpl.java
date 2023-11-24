@@ -104,9 +104,7 @@ public class MyPageServiceImpl implements MyPageService {
         }
 
         return orders.stream()
-                .map(order -> new PurViewDto(order.getOrderId(), order.getProductId().getProductId(), order.getTotalPrice(), order.getOrderEnroll(), order.getAddressee(), order.getAddress(), order.getMobile(), order.getComment()))
-
-
+                .map(order -> new PurViewDto(order.getOrderId(), order.getProductId().getProductId(), order.getTotalPrice(), order.getOrderEnroll()))
                 .collect(Collectors.toList());
 
 

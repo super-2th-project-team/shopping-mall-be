@@ -15,8 +15,4 @@ public class PurViewDto {
     private Long productId;
     private Long totalPrice;
     private Date orderEnroll;
-    private String addressee;
-    private String address;
-    private String mobile;
-    private String comment;
 }
