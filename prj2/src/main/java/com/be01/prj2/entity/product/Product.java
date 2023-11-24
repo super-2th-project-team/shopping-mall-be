@@ -1,5 +1,7 @@
 package com.be01.prj2.entity.product;
 
+import com.be01.prj2.entity.cart.Cart;
+import com.be01.prj2.entity.cart.CartProduct;
 import com.be01.prj2.entity.customer.Customer;
 import lombok.*;
 
@@ -48,8 +50,8 @@ public class Product {
     @JoinColumn(name = "user_idx") //실제 컬럼명
     private Customer sellerId;
 
-//    @OneToMany(mappedBy = "productId")
-//    private List<CartProduct> cartProducts; //장바구니에 담길 상품들
+    @OneToMany(mappedBy = "productId")
+    private List<CartProduct> cartProducts; //장바구니에 담길 상품들
 
 
 

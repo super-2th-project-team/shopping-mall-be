@@ -7,7 +7,6 @@ import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.exception.NotFoundException;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
-import com.be01.prj2.repository.SignOutRepository;
 import com.be01.prj2.role.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

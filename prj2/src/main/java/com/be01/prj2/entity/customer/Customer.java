@@ -1,7 +1,9 @@
 package com.be01.prj2.entity.customer;
 
+import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.role.Role;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,10 +40,10 @@ public class Customer implements UserDetails {
     @OneToMany(mappedBy = "sellerId")
     private List<Product> products;
 
-//    @OneToOne(mappedBy = "userIdx")
-//    @JsonManagedReference
-//    private Cart cart;
-//
+    @OneToOne(mappedBy = "userIdx")
+    @JsonManagedReference
+    private Cart cart;
+
 //    @OneToOne(mappedBy = "myPageUserId")
 //    private Mypage mypage;
 
