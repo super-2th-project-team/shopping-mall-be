@@ -5,7 +5,7 @@ import com.be01.prj2.dto.myPage.MyPageDto;
 import com.be01.prj2.dto.myPage.PurViewDto;
 import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.entity.customer.Customer;
-import com.be01.prj2.entity.myPage.MyPageEntity;
+import com.be01.prj2.entity.myPage.Mypage;
 import com.be01.prj2.entity.order.Order;
 import com.be01.prj2.entity.pay.PayEntity;
 import com.be01.prj2.exception.myPage.ErrorMessage;
@@ -38,7 +38,7 @@ public class MyPageServiceImpl implements MyPageService {
     public MyPageDto getMyPageInfo(String email) {
 
         // email로 유저 정보 조회
-        MyPageEntity mypageEntity = myPageRepository.findByEmail(email);
+        Mypage mypageEntity = myPageRepository.findByEmail(email);
 
         if (mypageEntity == null) {
             throw new MyPageException(ErrorMessage.USER_NOT_FOUND);
@@ -52,27 +52,27 @@ public class MyPageServiceImpl implements MyPageService {
     @Override
     public MyPageDto updateMyPageInfo(String email, MyPageDto myPageDto) {
 
-        MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
+        Mypage mypage = myPageRepository.findByEmail(email);
 
-        if (myPageEntity == null) {
+        if (mypage == null) {
             throw new MyPageException(ErrorMessage.USER_UPDATE_FAILED);
         }
 
-        myPageEntity.updateMyPage(myPageDto);
-        myPageRepository.save(myPageEntity);
+        mypage.updateMyPage(myPageDto);
+        myPageRepository.save(mypage);
 
-        return new MyPageDto(myPageEntity.getName(), myPageEntity.getEmail(), myPageEntity.getMobile(),
-                myPageEntity.getAddress(), myPageEntity.getGender(), myPageEntity.getMyInfo(), myPageEntity.getProfile(), myPageEntity.getProfileImg());
+        return new MyPageDto(mypage.getName(), mypage.getEmail(), mypage.getMobile(),
+                mypage.getAddress(), mypage.getGender(), mypage.getMyInfo(), mypage.getProfile(), mypage.getProfileImg());
     }
 
     public List<CartDto> getCartProductByEmail(String email) {
         // email로 MyPageEntity 객체 조회
-        MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
-        if (myPageEntity == null) {
+        Mypage mypage = myPageRepository.findByEmail(email);
+        if (mypage == null) {
             throw new MyPageException(ErrorMessage.USER_NOT_FOUND);
         }
         // MyPageEntity 객체로 Customer 객체 조회
-        Customer customer = myPageEntity.getMyPageUserId();
+        Customer customer = mypage.getMyPageUserId();
         // Customer 객체로 장바구니 물품 조회
         Cart cartEntity = cartRepository.findByUserIdx(customer);
 
@@ -92,12 +92,12 @@ public class MyPageServiceImpl implements MyPageService {
     @Override
     public List<PurViewDto> getViewProductByEmail(String email) {
         // email로 MyPageEntity 객체 조회
-        MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
-        if (myPageEntity == null) {
+        Mypage mypage = myPageRepository.findByEmail(email);
+        if (mypage == null) {
             throw new MyPageException(ErrorMessage.USER_NOT_FOUND);
         }
         // Customer 객체의 userIdx로 구매했던 물품 조회
-        List<Order> orders = orderRepository.findByUserId(myPageEntity.getMyPageUserId());
+        List<Order> orders = orderRepository.findByUserId(mypage.getMyPageUserId());
 
         if (orders.isEmpty()) {
             throw new MyPageException(ErrorMessage.ORDER_NOT_FOUND);
@@ -133,14 +133,14 @@ public class MyPageServiceImpl implements MyPageService {
     private PayEntity getPayEntity(String email) {
 
         // email로 유저 정보 조회
-        MyPageEntity myPageEntity = myPageRepository.findByEmail(email);
+        Mypage mypage = myPageRepository.findByEmail(email);
 
-        if (myPageEntity == null) {
+        if (mypage == null) {
             throw new MyPageException(ErrorMessage.USER_NOT_FOUND);
         }
 
         // id로 해당 유저 PayEntity 조회
-        PayEntity payEntity = payRepository.findByUserIdx(myPageEntity.getMyPageUserId().getUserId());
+        PayEntity payEntity = payRepository.findByUserIdx(mypage.getMyPageUserId().getUserId());
 
 
         if (payEntity == null) {

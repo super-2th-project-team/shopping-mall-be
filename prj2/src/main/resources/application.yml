@@ -50,11 +50,10 @@ cloud:
     s3:
       bucket: user-profile-prj2
     credentials:
-      access-key: ${access-key}
-      secret-key: ${secret-key}
+      access-key: AKIAZ6RPDHXFNB6EKUMZ
+      secret-key: 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
     region:
       static: ap-northeast-2
-
 
 
 

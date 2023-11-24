@@ -1,6 +1,6 @@
 package com.be01.prj2.dto.customerDto;
 
-import com.be01.prj2.entity.myPage.MyPageEntity;
+import com.be01.prj2.entity.myPage.Mypage;
 import com.be01.prj2.role.Role;
 import com.be01.prj2.entity.customer.Customer;
 import lombok.*;
@@ -37,8 +37,8 @@ public class SignupDto {
     }
 
 
-    public MyPageEntity myPageEntity(Customer customer) {
-        return MyPageEntity.builder()
+    public Mypage myPageEntity(Customer customer) {
+        return Mypage.builder()
                 .myPageUserId(customer)
                 .email(email)
                 .mobile(mobile)

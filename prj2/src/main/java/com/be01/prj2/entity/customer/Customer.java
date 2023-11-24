@@ -1,8 +1,7 @@
 package com.be01.prj2.entity.customer;
 
 import com.be01.prj2.entity.cart.Cart;
-import com.be01.prj2.entity.mypage.Mypage;
-import com.be01.prj2.entity.order.Order;
+import com.be01.prj2.entity.myPage.Mypage;
 import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.role.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -49,6 +48,8 @@ public class Customer implements UserDetails {
     @OneToOne(mappedBy = "myPageUserId")
     private Mypage mypage;
 
+    @Column(name = "points")
+    private int points;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -81,6 +82,4 @@ public class Customer implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
 }

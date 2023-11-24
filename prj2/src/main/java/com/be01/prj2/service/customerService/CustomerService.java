@@ -4,7 +4,7 @@ import com.be01.prj2.dto.customerDto.AddExtraInfoDto;
 import com.be01.prj2.dto.customerDto.LoginDto;
 import com.be01.prj2.dto.customerDto.SignupDto;
 import com.be01.prj2.entity.customer.Customer;
-import com.be01.prj2.entity.myPage.MyPageEntity;
+import com.be01.prj2.entity.myPage.Mypage;
 import com.be01.prj2.entity.pay.PayEntity;
 import com.be01.prj2.exception.NotFoundException;
 import com.be01.prj2.jwt.TokenProvider;
@@ -12,7 +12,6 @@ import com.be01.prj2.repository.customerRepository.CustomerRepository;
 import com.be01.prj2.repository.myPage.MyPageRepository;
 import com.be01.prj2.repository.myPage.PayRepository;
 import com.be01.prj2.role.Role;
-import com.be01.prj2.service.S3Service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -88,14 +87,14 @@ public class CustomerService {
         customerRepository.save(customer);
 
         // MyPageEntity 생성 및 저장
-        MyPageEntity myPageEntity = myPageEntity(customer);
-        myPageRepository.save(myPageEntity);
+        Mypage mypage = myPageEntity(customer);
+        myPageRepository.save(mypage);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 완료입니다");
     }
 
-    public MyPageEntity myPageEntity(Customer customer) {
-        return MyPageEntity.builder()
+    public Mypage myPageEntity(Customer customer) {
+        return Mypage.builder()
                 .myPageUserId(customer)
                 .email(customer.getEmail())
                 .mobile(customer.getMobile())

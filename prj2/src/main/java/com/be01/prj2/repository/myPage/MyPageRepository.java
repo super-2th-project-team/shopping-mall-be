@@ -1,10 +1,10 @@
 package com.be01.prj2.repository.myPage;
 
-import com.be01.prj2.entity.myPage.MyPageEntity;
+import com.be01.prj2.entity.myPage.Mypage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MyPageRepository extends JpaRepository<MyPageEntity, Long> {
+public interface MyPageRepository extends JpaRepository<Mypage, Long> {
 
     // Email을 기준으로 마이페이지를 조회
-    MyPageEntity findByEmail(String email);
+    Mypage findByEmail(String email);
 }

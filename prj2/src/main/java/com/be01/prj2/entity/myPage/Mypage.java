@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "mypage")
-public class MyPageEntity {
+public class Mypage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
