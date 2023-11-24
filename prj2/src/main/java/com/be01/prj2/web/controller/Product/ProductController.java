@@ -78,7 +78,7 @@ public class ProductController {
     public ResponseEntity<String> updateStock(@RequestHeader("access_token") String token,
                                               @PathVariable Long productId,
                                               @RequestBody Map<String, Integer> requestBody) {
-        Integer productStock = requestBody.get("productStock");
+        Integer productStock = requestBody.get("stock");
         try {
             productService.stockModify(token, productId, productStock);
             return ResponseEntity.status(HttpStatus.CREATED).body("물품 재고가 업데이트되었습니다.");
