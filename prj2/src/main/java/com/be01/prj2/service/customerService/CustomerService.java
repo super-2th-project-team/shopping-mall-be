@@ -2,6 +2,7 @@ package com.be01.prj2.service.customerService;
 
 import com.be01.prj2.dto.customerDto.AddExtraInfoDto;
 import com.be01.prj2.dto.customerDto.LoginDto;
+import com.be01.prj2.dto.customerDto.SignoutDto;
 import com.be01.prj2.dto.customerDto.SignupDto;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.myPage.Mypage;
@@ -83,7 +84,6 @@ public class CustomerService {
         payEntity.setBalance(0);
         payRepository.save(payEntity);
 
-//        customer.setPayEntity(payEntity);
         customerRepository.save(customer);
 
         // MyPageEntity 생성 및 저장
@@ -163,10 +163,10 @@ public class CustomerService {
     }
 
     @Transactional
-    public void signOut(Customer signOutDto) {
-        String email = signOutDto.getEmail();
-        String password = signOutDto.getPassword();
-        String mobile = signOutDto.getMobile();
+    public void signOut(SignoutDto signoutDto) {
+        String email = signoutDto.getEmail();
+        String password = signoutDto.getPassword();
+        String mobile = signoutDto.getMobile();
 
         Optional<Customer> signOutCustomer = customerRepository.findAllByEmailAndMobile(email, mobile);
 
@@ -174,6 +174,10 @@ public class CustomerService {
             Customer customer = signOutCustomer.get();
 
             if (passwordEncoder.matches(password, customer.getPassword())) {
+
+                myPageRepository.deleteByMyPageUserId(customer);
+                payRepository.deleteByUserIdx(customer.getUserId());
+
                 customer.setRole(Role.SIGNOUT);
                 customerRepository.save(customer);
             } else {

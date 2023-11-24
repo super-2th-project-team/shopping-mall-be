@@ -2,8 +2,10 @@ package com.be01.prj2.entity.customer;
 
 import com.be01.prj2.entity.cart.Cart;
 import com.be01.prj2.entity.myPage.Mypage;
+import com.be01.prj2.entity.order.Order;
 import com.be01.prj2.entity.product.Product;
 import com.be01.prj2.role.Role;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -50,6 +52,10 @@ public class Customer implements UserDetails {
 
     @Column(name = "points")
     private int points;
+
+    @OneToMany(mappedBy = "userId")
+    @JsonBackReference
+    private List<Order> orders;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

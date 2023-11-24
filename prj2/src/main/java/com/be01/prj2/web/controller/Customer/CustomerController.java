@@ -2,8 +2,8 @@ package com.be01.prj2.web.controller.Customer;
 
 import com.be01.prj2.dto.customerDto.AddExtraInfoDto;
 import com.be01.prj2.dto.customerDto.LoginDto;
+import com.be01.prj2.dto.customerDto.SignoutDto;
 import com.be01.prj2.dto.customerDto.SignupDto;
-import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.exception.FileUploadFailedException;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
@@ -80,9 +80,8 @@ public class CustomerController {
     }
 
     @PostMapping("/signout")
-    public ResponseEntity<?> signout(@RequestBody Customer signOutDto){
-
-        customerService.signOut(signOutDto);
+    public ResponseEntity<?> signout(@RequestBody SignoutDto signoutDto){
+        customerService.signOut(signoutDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("회원 탈퇴가 완료되었습니다. 이용해주셔서 감사합니다");
     }
 
