@@ -19,7 +19,7 @@ public class SellDto {
     private Long sellerId;
     private Long productId;
     private String name;
-    private int originPrice;
+    private Integer originPrice;
     private int price;
     private String description;
     private Integer stock;
@@ -40,12 +40,12 @@ public class SellDto {
                 .productId(product.getProductId())
                 .name(product.getProductName())
                 .price(product.getProductPrice())
-                .originPrice(product.getProductPrice())
+                .originPrice(product.getOriginPrice() != null ? product.getOriginPrice():product.getProductPrice())
                 .description(product.getProductInfo())
                 .stock(product.getProductStock())
                 .productSell(product.getProductSell())
                 .enroll(product.getProductEnroll())
-                .discount(0)
+                .discount(product.getDiscount() != null ? product.getDiscount() : 0)
                 .category(product.getCategory())
                 .subCategory(product.getSubCategory())
                 .color(color)

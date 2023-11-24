@@ -25,7 +25,7 @@ public class Product {
     private String productName;
 
     private int productPrice;
-    private int originPrice;
+    private Integer originPrice;
     private String productInfo;
     private Integer productStock;
     private Integer productSell;

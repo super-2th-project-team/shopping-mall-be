@@ -9,8 +9,8 @@ spring:
     port: 6379
   servlet:
     multipart:
-      max-file-size: 20MB
-      max-request-size: 20MB
+      max-file-size: 300MB
+      max-request-size: 300MB
 
   jpa:
     show-sql: true
