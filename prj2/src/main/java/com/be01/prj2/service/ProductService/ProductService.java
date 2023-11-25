@@ -1,6 +1,7 @@
 package com.be01.prj2.service.ProductService;
 
 import com.be01.prj2.dto.productsDto.SellDto;
+import com.be01.prj2.entity.cart.CartProduct;
 import com.be01.prj2.entity.customer.Customer;
 import com.be01.prj2.entity.product.Product;
 
@@ -10,6 +11,7 @@ import com.be01.prj2.repository.productRepository.ColorRepository;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
 import com.be01.prj2.repository.productRepository.ProductRepository;
 import com.be01.prj2.repository.productRepository.SizeRepository;
+import com.be01.prj2.service.cartService.CartService;
 import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +37,7 @@ public class ProductService {
     private final CustomerRepository customerRepository;
     private final ColorRepository colorRepository;
     private final SizeRepository sizeRepository;
+    private final CartService cartService;
 
     //판매 물품 등록
     @Transactional
@@ -98,7 +101,7 @@ public class ProductService {
 
     //productId로 상품 삭제
     @Transactional
-    public void deleteByProductId(@RequestHeader("access_token")String token, Long productId) throws AccessDeniedException {
+    public void deleteProductAndUpdateCarts(@RequestHeader("access_token")String token, Long productId) throws AccessDeniedException {
         String email = tokenProvider.getEmailBytoken(token);
         Optional<Customer> seller = customerRepository.findByEmail(email);
 
@@ -108,8 +111,13 @@ public class ProductService {
 
             if (optionalProduct.isPresent()) {
                 Product product = optionalProduct.get();
+                List<CartProduct> cartProducts = product.getCartProducts();
 
                 if (product.getSellerId().equals(customer)) {
+                    int removePrice = calculateRemovePrice(cartProducts);
+                    int removeQuantity = calculateRemoveQuantity(cartProducts);
+
+                    cartService.updateCartsOnProductDelete(product, removePrice, removeQuantity);
 
                     productRepository.delete(product);
                 } else {
@@ -121,6 +129,23 @@ public class ProductService {
         } else {
             throw new EntityNotFoundException("판매자를 찾을 수 없습니다.");
         }
+    }
+    private int calculateRemovePrice(List<CartProduct> cartProducts){
+        int totalRemovePrice = 0;
+        for (CartProduct cartProduct : cartProducts) {
+            int productPrice = cartProduct.getPrice();
+            int cartQuantity = cartProduct.getCartQuantity();
+            totalRemovePrice += productPrice * cartQuantity;
+        }
+        return totalRemovePrice;
+    }
+    private int calculateRemoveQuantity(List<CartProduct> cartProducts){
+        int totalRemoveQuantity = 0;
+        for (CartProduct cartProduct : cartProducts) {
+            int cartQuantity = cartProduct.getCartQuantity();
+            totalRemoveQuantity += cartQuantity;
+        }
+        return totalRemoveQuantity;
     }
 
     @Transactional

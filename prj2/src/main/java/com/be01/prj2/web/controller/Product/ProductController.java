@@ -7,6 +7,7 @@ import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
 import com.be01.prj2.repository.productRepository.ProductRepository;
 import com.be01.prj2.service.SellService.SellService;
+import com.be01.prj2.service.cartService.CartService;
 import com.be01.prj2.service.customerService.CustomerService;
 import com.be01.prj2.service.ProductService.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class ProductController {
     private final TokenProvider tokenProvider;
     private final CustomerRepository customerRepository;
     private final SellService sellService;
+    private final CartService cartService;
 
     //토큰을 받아서 상품 등록
     @PostMapping("/register")
@@ -75,7 +77,7 @@ public class ProductController {
     public ResponseEntity<?> deleteByProductId(@RequestHeader("access_token") String token,
                                                @PathVariable Long productId) {
         try {
-            productService.deleteByProductId(token, productId);
+            productService.deleteProductAndUpdateCarts(token, productId);
             return ResponseEntity.status(HttpStatus.CREATED).body("물품이 삭제되었습니다.");
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
