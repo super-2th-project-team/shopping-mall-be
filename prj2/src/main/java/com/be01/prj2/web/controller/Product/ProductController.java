@@ -13,6 +13,7 @@ import com.be01.prj2.service.ProductService.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,10 +62,17 @@ public class ProductController {
     public List<SellDto> getAll(Pageable pageable){
 
 
-        Page<Product> productPage = productService.findAll(pageable);
+        Pageable customPageable = PageRequest.of(pageable.getPageNumber(), 25, pageable.getSort());
+
+        Page<Product> productPage = productService.findAll(customPageable);
         List<Product> productEntity = productPage.getContent();
 
+        int currentPage = productPage.getNumber();
+        int pageSize = productPage.getSize();
+        long totalItems = productPage.getTotalElements();
+
         return productEntity.stream()
+                .filter(product -> product.getProductStock() > 0)
                 .map(product -> {
                     List<String> colorList = sellService.getProductColor(product.getProductId());
                     List<String> sizeList = sellService.getProductSize(product.getProductId());
