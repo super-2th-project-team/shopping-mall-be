@@ -56,7 +56,7 @@ public class S3Service {
         objectMetadata.setContentLength(multipartFile.getSize());
 
         try(InputStream inputStream = multipartFile.getInputStream()){
-            amazonS3Client.putObject(new EncryptedPutObjectRequest(bucketName, fileName, inputStream, objectMetadata));
+            amazonS3Client.putObject(new EncryptedPutObjectRequest(bucketName, fileName, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
 
 
         }catch (Exception e){
