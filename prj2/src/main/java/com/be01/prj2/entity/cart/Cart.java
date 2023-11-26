@@ -54,5 +54,13 @@ public class Cart {
         return cart;
     }
 
+    public void updateCartOnProductDelete(int removePrice, int removeQuantity) {
+        int currentTotalPrice = getTotalPrice();
+        setTotalPrice(currentTotalPrice - removePrice);
+
+        int currentTotalQuantity = getCartQuantity();
+        setCartQuantity(currentTotalQuantity - removeQuantity);
+    }
+
 
 }
