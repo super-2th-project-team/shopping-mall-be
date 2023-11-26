@@ -14,6 +14,7 @@ import com.be01.prj2.service.customerService.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -115,6 +116,16 @@ public class CartService {
 
         return convertToDto(myCart);
 
+    }
+
+    @Transactional
+    public void updateCartsOnProductDelete(Product product, int removePrice, int removeQuantity) {
+        List<CartProduct> cartProducts = product.getCartProducts();
+
+        for (CartProduct cartProduct : cartProducts) {
+            Cart cart = cartProduct.getCartId();
+            cart.updateCartOnProductDelete(removePrice, removeQuantity);
+        }
     }
 
 }

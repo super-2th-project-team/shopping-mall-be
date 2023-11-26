@@ -19,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -82,8 +84,10 @@ public class ProductController {
         try {
             productService.stockModify(token, productId, productStock);
             return ResponseEntity.status(HttpStatus.CREATED).body("물품 재고가 업데이트되었습니다.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당하는 물품이 없습니다.");
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -102,5 +106,19 @@ public class ProductController {
 
         Integer discount = requestBody.get("discount");
         return  productService.discount(token,productId,discount);
+    }
+
+    //토큰을 받아서 상품 삭제
+    @DeleteMapping("/delete/{productId}")
+    public ResponseEntity<?> deleteByProductId(@RequestHeader("access_token") String token,
+                                               @PathVariable Long productId) {
+        try {
+            productService.deleteProductAndUpdateCarts(token, productId);
+            return ResponseEntity.status(HttpStatus.CREATED).body("물품이 삭제되었습니다.");
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }
