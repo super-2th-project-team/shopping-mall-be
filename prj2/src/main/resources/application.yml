@@ -13,7 +13,7 @@ spring:
       max-request-size: 300MB
 
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
     properties:
@@ -35,8 +35,7 @@ mvc:
 
 logging:
   level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
+
     org.springframework.security: DEBUG
     level:
       com:

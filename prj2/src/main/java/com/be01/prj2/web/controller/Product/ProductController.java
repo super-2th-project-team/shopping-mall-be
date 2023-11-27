@@ -12,6 +12,7 @@ import com.be01.prj2.service.customerService.CustomerService;
 import com.be01.prj2.service.ProductService.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api/product")
 @Slf4j
+@EnableCaching
 public class ProductController {
 
     private final ProductRepository productRepository;

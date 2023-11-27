@@ -6,11 +6,13 @@ import com.amazonaws.services.s3.model.EncryptedPutObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.be01.prj2.entity.customer.Customer;
+import com.be01.prj2.entity.myPage.Mypage;
 import com.be01.prj2.entity.product.ProductImg;
 import com.be01.prj2.exception.EmptyFileException;
 import com.be01.prj2.exception.FileUploadFailedException;
 import com.be01.prj2.jwt.TokenProvider;
 import com.be01.prj2.repository.customerRepository.CustomerRepository;
+import com.be01.prj2.repository.myPage.MyPageRepository;
 import com.be01.prj2.repository.productRepository.ImgRepository;
 import com.be01.prj2.repository.productRepository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ public class S3Service {
     private final CustomerRepository customerRepository;
     private final ImgRepository imgRepository;
     private final ProductRepository productRepository;
+    private final MyPageRepository  myPageRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -68,6 +71,9 @@ public class S3Service {
         if(byEmail.isPresent()){
             Customer customer = byEmail.get();
             customer.setProfileImg(amazonS3Client.getUrl(bucketName, fileName).toString());
+            Mypage mypage = myPageRepository.findByEmail(customer.getEmail());
+            mypage.setProfileImg(amazonS3Client.getUrl(bucketName, fileName).toString());
+            myPageRepository.save(mypage);
             customerRepository.save(customer);
         }
 
