@@ -34,11 +34,11 @@ public class Customer implements UserDetails {
     private String name;
     private String email;
     private String password;
-    private String mobile;
-    private char gender;
     private String address;
     private String profileImg;
     private Role role;
+    private String mobile;
+    private char gender;
 
     @OneToMany(mappedBy = "sellerId")
     private List<Product> products;

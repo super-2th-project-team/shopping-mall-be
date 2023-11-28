@@ -64,7 +64,7 @@ public class ProductController {
     public List<SellDto> getAll(Pageable pageable){
 
 
-        Pageable customPageable = PageRequest.of(pageable.getPageNumber(), 25, pageable.getSort());
+        Pageable customPageable = PageRequest.of(pageable.getPageNumber(), 100, pageable.getSort());
 
         Page<Product> productPage = productService.findAll(customPageable);
         List<Product> productEntity = productPage.getContent();

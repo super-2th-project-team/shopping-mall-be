@@ -2,7 +2,7 @@ spring:
   datasource:
     username: root
     password: zkvpfkxp12
-    url: jdbc:mysql://database-1.cahlafz8ipck.ap-northeast-2.rds.amazonaws.com/prj2
+    url: jdbc:mysql://database-1.cahlafz8ipck.ap-northeast-2.rds.amazonaws.com:3306/prj2_final
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: localhost

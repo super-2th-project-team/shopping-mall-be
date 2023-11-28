@@ -18,6 +18,7 @@ import com.be01.prj2.repository.productRepository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@EnableCaching
 public class S3Service {
 
     private final AmazonS3Client amazonS3Client;
